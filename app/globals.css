@@ -1,26 +1,271 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   FM2 EMPIRE — DESIGN SYSTEM
+   All design tokens live here. No hardcoded hex values
+   anywhere in components — everything references these tokens.
+   Tailwind v4 uses CSS-native @theme for configuration.
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* ----------------------------------------------------------
+     BRAND COLOURS
+     Cinematic dark base. Warm gold as the signature accent.
+     FM2 is a creative empire — the palette reflects ambition,
+     prestige, and energy without looking generic.
+  ---------------------------------------------------------- */
+
+  --color-fm2-black:      #080808;
+  --color-fm2-dark:       #111111;
+  --color-fm2-surface:    #1A1A1A;
+  --color-fm2-border:     #2A2A2A;
+  --color-fm2-gold:       #C9A84C;
+  --color-fm2-gold-light: #E8C97A;
+  --color-fm2-white:      #F5F5F0;
+  --color-fm2-muted:      #888880;
+  --color-fm2-red:        #C0392B;
+  --color-fm2-success:    #27AE60;
+
+  /* ----------------------------------------------------------
+     TYPOGRAPHY
+     Display: Playfair Display — editorial, cinematic, bold.
+     Body: Inter — clean, readable, modern.
+  ---------------------------------------------------------- */
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", monospace;
+
+  /* ----------------------------------------------------------
+     SPACING
+  ---------------------------------------------------------- */
+
+  --spacing-section:    6rem;
+  --spacing-section-sm: 4rem;
+
+  /* ----------------------------------------------------------
+     BORDER RADIUS
+  ---------------------------------------------------------- */
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* ----------------------------------------------------------
+     TRANSITIONS
+  ---------------------------------------------------------- */
+
+  --transition-fast:  150ms ease;
+  --transition-base:  250ms ease;
+  --transition-slow:  400ms ease;
+  --transition-xslow: 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   BASE RESET
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-fm2-black);
+  color: var(--color-fm2-white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+
+.text-gold       { color: var(--color-fm2-gold); }
+.text-gold-light { color: var(--color-fm2-gold-light); }
+.text-muted      { color: var(--color-fm2-muted); }
+.text-fm2-white  { color: var(--color-fm2-white); }
+
+/* Gradient text — FM2 signature heading treatment */
+.text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-fm2-white) 0%,
+    var(--color-fm2-gold) 50%,
+    var(--color-fm2-white) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+
+.container-fm2 {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-fm2 { padding-inline: 2.5rem; }
+}
+
+@media (min-width: 1280px) {
+  .container-fm2 { padding-inline: 2rem; }
+}
+
+.section-padding {
+  padding-block: var(--spacing-section-sm);
+}
+
+@media (min-width: 768px) {
+  .section-padding { padding-block: var(--spacing-section); }
+}
+
+/* ============================================================
+   REUSABLE COMPONENT STYLES
+   ============================================================ */
+
+/* Gold accent line */
+.gold-line {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--color-fm2-gold);
+}
+
+/* Eyebrow label above section headings */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-fm2-gold);
+}
+
+/* Card surface */
+.card-surface {
+  background-color: var(--color-fm2-surface);
+  border: 1px solid var(--color-fm2-border);
+  border-radius: var(--radius-lg);
+}
+
+/* ============================================================
+   BUTTON SYSTEM
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  padding: 0.75rem 1.75rem;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-fm2-gold);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  background: var(--color-fm2-gold);
+  color: var(--color-fm2-black);
+}
+
+.btn-primary:hover {
+  background: var(--color-fm2-gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(201, 168, 76, 0.25);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-fm2-white);
+  border: 1px solid var(--color-fm2-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-fm2-gold);
+  color: var(--color-fm2-gold);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-fm2-muted);
+  padding-inline: 0.5rem;
+}
+
+.btn-ghost:hover {
+  color: var(--color-fm2-white);
+}
+
+.btn-lg { padding: 1rem 2.25rem; font-size: 1rem; }
+.btn-sm { padding: 0.5rem 1.25rem; font-size: 0.75rem; }
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-fm2-dark); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-fm2-border);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-fm2-gold); }
+
+/* ============================================================
+   ACCESSIBILITY — REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   TEXT SELECTION
+   ============================================================ */
+
+::selection {
+  background: rgba(201, 168, 76, 0.25);
+  color: var(--color-fm2-white);
 }
