@@ -1,14 +1,8 @@
 // ============================================================
 // FM2 EMPIRE — SERVICES SECTION
-// What FM2 offers. Each service is a card with an icon,
-// title, description, audience, and a CTA.
-//
-// Layout: 3-column grid on desktop, stacked on mobile.
-// The cards animate in with a stagger — each one slightly
-// after the last. Entertainment energy: bold, direct.
-//
-// The "featured" service gets a gold border treatment to
-// draw the eye — typically the core talent development offer.
+// Centered card content — icon, title, description, audience
+// tag, and CTA all aligned to the middle of each card for a
+// more balanced, premium feel.
 // ============================================================
 
 "use client";
@@ -110,7 +104,7 @@ const containerVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-  hidden:  { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
@@ -132,7 +126,6 @@ export default function Services() {
       className="relative"
       style={{ backgroundColor: "var(--color-fm2-black)" }}
     >
-      {/* Top border */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
@@ -141,24 +134,12 @@ export default function Services() {
         }}
       />
 
-      <div className="container-fm2 section-padding">
+      <div className="container-fm2 section-padding flex flex-col gap-12">
 
         {/* ---- HEADER ---- */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
-
           <div className="flex flex-col gap-6 max-w-xl">
             <SectionLabel text="What We Do" align="left" />
-            <AnimatedText
-              text="Built for Creatives. Designed for Impact."
-              as="h2"
-              animation="reveal"
-              delay={0.1}
-              className="font-display font-bold leading-tight"
-              style={{
-                fontSize: "clamp(1.875rem, 4vw, 3rem)",
-                color: "var(--color-fm2-white)",
-              }}
-            />
             <AnimatedText
               text="FM2 offers a full suite of creative services — from developing raw talent to producing broadcast-ready content and executing world-class events."
               as="p"
@@ -180,12 +161,11 @@ export default function Services() {
               Discuss a Project
             </Button>
           </motion.div>
-
         </div>
 
         {/* ---- SERVICES GRID ---- */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start "
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -198,7 +178,7 @@ export default function Services() {
                 key={service.id}
                 variants={cardVariants}
                 className={cn(
-                  "card-surface p-7 flex flex-col gap-5 group",
+                  "card-surface flex flex-col items-center text-center gap-4",
                   "transition-all duration-300 hover:-translate-y-1",
                   "hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]",
                   service.isFeatured
@@ -206,23 +186,8 @@ export default function Services() {
                     : "hover:border-[#C9A84C]/30"
                 )}
               >
-                {/* Featured badge */}
-                {service.isFeatured && (
-                  <div className="self-start">
-                    <span
-                      className="text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full"
-                      style={{
-                        backgroundColor: "rgba(201, 168, 76, 0.1)",
-                        color: "var(--color-fm2-gold)",
-                        border: "1px solid rgba(201, 168, 76, 0.3)",
-                      }}
-                    >
-                      Core Offering
-                    </span>
-                  </div>
-                )}
 
-                {/* Icon */}
+                {/* Icon — centered */}
                 <div
                   className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 group-hover:bg-[rgba(201,168,76,0.12)]"
                   style={{
@@ -230,13 +195,10 @@ export default function Services() {
                     border: "1px solid rgba(201, 168, 76, 0.15)",
                   }}
                 >
-                  <Icon
-                    size={20}
-                    style={{ color: "var(--color-fm2-gold)" }}
-                  />
+                  <Icon size={20} style={{ color: "var(--color-fm2-gold)" }} />
                 </div>
 
-                {/* Title */}
+                {/* Title — centered */}
                 <h3
                   className="font-display font-bold text-xl leading-tight"
                   style={{ color: "var(--color-fm2-white)" }}
@@ -244,38 +206,32 @@ export default function Services() {
                   {service.title}
                 </h3>
 
-                {/* Description */}
+                {/* Description — centered, max width keeps lines balanced */}
                 <p
-                  className="text-sm leading-relaxed flex-1"
+                  className="text-sm leading-relaxed max-w-[30ch]"
                   style={{ color: "var(--color-fm2-muted)" }}
                 >
                   {service.description}
                 </p>
 
-                {/* Audience tag */}
+                {/* Audience tag — centered, full width border */}
                 <div
-                  className="text-xs font-medium tracking-wide pt-1 pb-3 border-b"
+                  className="w-full text-xs font-medium tracking-wide pt-3 pb-1 border-t mt-1"
                   style={{
                     color: "var(--color-fm2-muted)",
                     borderColor: "var(--color-fm2-border)",
                   }}
                 >
-                  <span style={{ color: "var(--color-fm2-gold)" }}>
-                    For:{" "}
-                  </span>
+                  <span style={{ color: "var(--color-fm2-gold)" }}>For: </span>
                   {service.audience}
                 </div>
 
-                {/* CTA */}
+                {/* CTA — centered */}
                 <Button
                   href={service.ctaHref}
                   variant={service.isFeatured ? "primary" : "ghost"}
                   size="sm"
-                  className={cn(
-                    "self-start",
-                    !service.isFeatured &&
-                      "hover:text-[#C9A84C] px-0"
-                  )}
+                  className="mt-1"
                 >
                   {service.ctaLabel} →
                 </Button>

@@ -68,12 +68,15 @@
    BASE RESET
    ============================================================ */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+   
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
@@ -137,11 +140,15 @@ body {
 }
 
 .section-padding {
-  padding-block: var(--spacing-section-sm);
+  padding-block: 3.5rem;
 }
 
-@media (min-width: 768px) {
-  .section-padding { padding-block: var(--spacing-section); }
+@media (min-width: 640px) {
+  .section-padding { padding-block: 4.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .section-padding { padding-block: 6.5rem; }
 }
 
 /* ============================================================
@@ -166,11 +173,18 @@ body {
   color: var(--color-fm2-gold);
 }
 
-/* Card surface */
+/* Card surface — EVERY card across the site uses this class.
+   Padding lives here so spacing is consistent everywhere,
+   instead of relying on each component to add its own. */
 .card-surface {
   background-color: var(--color-fm2-surface);
   border: 1px solid var(--color-fm2-border);
   border-radius: var(--radius-lg);
+  padding: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .card-surface { padding: 1.75rem; }
 }
 
 /* ============================================================
