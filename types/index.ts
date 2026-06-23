@@ -61,11 +61,14 @@ export type EventStatus = "upcoming" | "ongoing" | "past" | "cancelled";
 
 export type Event = {
   id: string;
+  slug: string;
   title: string;
   description: string;
+  longDescription?: string;
   date: string;
   time: string;
   venue: string;
+  address?: string;
   city: string;
   imageUrl: string;
   ticketPrice: number;
@@ -74,7 +77,9 @@ export type Event = {
   isFeatured: boolean;
   organiser: string;
   isThirdParty: boolean;
+  lineup?: string[];
 };
+ 
 
 // ------------------------------------------------------------
 // MEDIA
