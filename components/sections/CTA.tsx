@@ -17,7 +17,7 @@ const CTA_IMAGE =
 export default function CTA() {
   return (
     <section
-      id="join"
+      id="apply"
       className="relative overflow-hidden"
       style={{ backgroundColor: "var(--color-fm2-black)" }}
     >

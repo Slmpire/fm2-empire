@@ -1,15 +1,9 @@
 // ============================================================
 // FM2 EMPIRE — NAVBAR
-// Fixed top navigation. Transparent on load, fills dark on
-// scroll. This is a cinematic entertainment brand — the nav
-// should feel sleek and confident, never cluttered.
-//
-// Desktop: logo left, links center, CTA right.
-// Mobile:  logo left, hamburger right → full screen menu.
-//
-// The full screen mobile menu is the entertainment energy
-// moment — it opens with a dramatic dark overlay and the
-// links animate in one by one.
+// Now renders on every page via the root layout. Links are
+// path-aware: "About" and "Media" go to their own dedicated
+// pages; "Services", "Events", "Team" remain homepage anchors
+// (prefixed with "/" so they work correctly from any page).
 // ============================================================
 
 "use client";
@@ -17,28 +11,19 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
 import type { NavLink } from "@/types/index";
 
-// ------------------------------------------------------------
-// NAV LINKS
-// Update these as FM2's pages grow.
-// ------------------------------------------------------------
-
 const navLinks: NavLink[] = [
-  { label: "About",    href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Media",    href: "#media" },
-  { label: "Events",   href: "#events" },
-  { label: "Team",     href: "#team" },
+  { label: "About",    href: "/about" },
+  { label: "Services", href: "/#services" },
+  { label: "Media",    href: "/media" },
+  { label: "Events",   href: "/#events" },
+  { label: "Team",     href: "/#team" },
 ];
-
-// ------------------------------------------------------------
-// ANIMATION VARIANTS
-// ease arrays are cast as tuples to satisfy Framer Motion v12
-// ------------------------------------------------------------
 
 const mobileMenuVariants: Variants = {
   closed: {
@@ -72,43 +57,44 @@ const mobileLinkVariants: Variants = {
   }),
 };
 
-// ------------------------------------------------------------
-// COMPONENT
-// ------------------------------------------------------------
-
 export default function Navbar() {
-  const [isScrolled, setIsScrolled]       = useState(false);
-  const [isMenuOpen, setIsMenuOpen]       = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeHash, setActiveHash] = useState("");
 
-  // Track scroll position to fill navbar background
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Track active section for nav link highlight
+  // Only watch for section anchors when on the homepage —
+  // dedicated pages like /about don't have these IDs at all.
   useEffect(() => {
-    const sectionIds = navLinks.map((l) => l.href.replace("#", ""));
+    if (pathname !== "/") return;
+
+    const sectionIds = navLinks
+      .filter((link) => link.href.includes("#"))
+      .map((link) => link.href.split("#")[1]);
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(`#${entry.target.id}`);
-          }
+          if (entry.isIntersecting) setActiveHash(entry.target.id);
         });
       },
       { rootMargin: "-40% 0px -55% 0px" }
     );
+
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
-    return () => observer.disconnect();
-  }, []);
 
-  // Prevent body scroll when mobile menu is open
+    return () => observer.disconnect();
+  }, [pathname]);
+
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -116,9 +102,19 @@ export default function Navbar() {
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  // Active state: dedicated pages check the exact path;
+  // homepage anchors check both "we're on /" AND "that
+  // section is currently in view".
+  const isLinkActive = (href: string) => {
+    if (href.includes("#")) {
+      const hash = href.split("#")[1];
+      return pathname === "/" && activeHash === hash;
+    }
+    return pathname === href;
+  };
+
   return (
     <>
-      {/* ---- MAIN NAVBAR ---- */}
       <motion.header
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
@@ -136,60 +132,49 @@ export default function Navbar() {
         <div className="container-fm2">
           <div className="flex items-center justify-between h-20">
 
-            {/* LOGO */}
-            <Link
-              href="/"
-              className="flex items-center gap-2 group"
-              onClick={closeMenu}
-            >
+            <Link href="/" className="flex items-center gap-2 group" onClick={closeMenu}>
               <span
                 className="font-display text-2xl font-bold tracking-tight"
                 style={{ color: "var(--color-fm2-white)" }}
               >
                 FM2
-                <span style={{ color: "var(--color-fm2-gold)" }}>
-                  {" "}Empire
-                </span>
+                <span style={{ color: "var(--color-fm2-gold)" }}> Empire</span>
               </span>
             </Link>
 
-            {/* DESKTOP LINKS */}
             <nav className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "text-sm font-medium tracking-wide transition-colors duration-200 relative group",
-                    activeSection === link.href
-                      ? "text-[#C9A84C]"
-                      : "text-[#888880] hover:text-[#F5F5F0]"
-                  )}
-                >
-                  {link.label}
-                  <span
+              {navLinks.map((link) => {
+                const active = isLinkActive(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
                     className={cn(
-                      "absolute -bottom-1 left-0 h-px bg-[#C9A84C] transition-all duration-300",
-                      activeSection === link.href
-                        ? "w-full"
-                        : "w-0 group-hover:w-full"
+                      "text-sm font-medium tracking-wide transition-colors duration-200 relative group",
+                      active ? "text-[#C9A84C]" : "text-[#888880] hover:text-[#F5F5F0]"
                     )}
-                  />
-                </Link>
-              ))}
+                  >
+                    {link.label}
+                    <span
+                      className={cn(
+                        "absolute -bottom-1 left-0 h-px bg-[#C9A84C] transition-all duration-300",
+                        active ? "w-full" : "w-0 group-hover:w-full"
+                      )}
+                    />
+                  </Link>
+                );
+              })}
             </nav>
 
-            {/* DESKTOP CTA */}
             <div className="hidden md:flex items-center gap-3">
-              <Button href="#contact" variant="secondary" size="sm">
+              <Button href="/contact" variant="secondary" size="sm">
                 Get in Touch
               </Button>
-              <Button href="#apply" variant="primary" size="sm">
+              <Button href="/#apply" variant="primary" size="sm">
                 Join FM2
               </Button>
             </div>
 
-            {/* MOBILE HAMBURGER */}
             <button
               className="md:hidden flex items-center justify-center w-10 h-10 rounded-md transition-colors"
               style={{ color: "var(--color-fm2-white)" }}
@@ -226,7 +211,6 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      {/* ---- MOBILE FULL SCREEN MENU ---- */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -239,7 +223,6 @@ export default function Navbar() {
           >
             <div className="container-fm2 flex flex-col justify-center h-full pb-20">
 
-              {/* MOBILE NAV LINKS */}
               <nav className="flex flex-col gap-2">
                 {navLinks.map((link, index) => (
                   <motion.div
@@ -267,7 +250,6 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              {/* MOBILE CTA BUTTONS */}
               <motion.div
                 className="flex flex-col gap-3 mt-10"
                 initial={{ opacity: 0, y: 20 }}
@@ -275,7 +257,7 @@ export default function Navbar() {
                 transition={{ delay: 0.5, duration: 0.4 }}
               >
                 <Button
-                  href="#apply"
+                  href="/#apply"
                   variant="primary"
                   size="lg"
                   className="w-full justify-center"
@@ -284,7 +266,7 @@ export default function Navbar() {
                   Join FM2
                 </Button>
                 <Button
-                  href="#contact"
+                  href="/contact"
                   variant="secondary"
                   size="lg"
                   className="w-full justify-center"
