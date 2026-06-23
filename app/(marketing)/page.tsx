@@ -1,7 +1,6 @@
 // ============================================================
 // FM2 EMPIRE — LANDING PAGE
-// Assembles every section in order. This is the page that
-// renders at the root URL.
+// Assembles every section in order.
 // ============================================================
 
 import Navbar from "@/components/layout/Navbar";
@@ -12,6 +11,8 @@ import Services from "@/components/sections/Services";
 import Media from "@/components/sections/Media";
 import Events from "@/components/sections/Events";
 import Team from "@/components/sections/Team";
+import Testimonials from "@/components/sections/Testimonials";
+import CTA from "@/components/sections/CTA";
 
 export default function LandingPage() {
   return (
@@ -24,6 +25,8 @@ export default function LandingPage() {
         <Media />
         <Events />
         <Team />
+        <Testimonials />
+        <CTA />
       </main>
       <Footer />
     </>

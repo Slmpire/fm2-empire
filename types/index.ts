@@ -39,9 +39,11 @@ export type Service = {
 
 export type TeamMember = {
   id: string;
+  slug: string;
   name: string;
   role: string;
   bio: string;
+  longBio?: string;
   imageUrl: string;
   socials?: {
     instagram?: string;
