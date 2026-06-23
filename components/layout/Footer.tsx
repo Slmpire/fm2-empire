@@ -18,10 +18,10 @@ const footerLinks = [
   {
     heading: "Company",
     links: [
-      { label: "About FM2",  href: "#about" },
-      { label: "Our Team",   href: "#team" },
-      { label: "Careers",    href: "#apply" },
-      { label: "Contact",    href: "#contact" },
+     { label: "About FM2",  href: "/about" },
+      { label: "Our Team",   href: "/about#team" },
+      { label: "Careers",    href: "/#apply" },
+      { label: "Contact",    href: "/contact" },
     ],
   },
   {
