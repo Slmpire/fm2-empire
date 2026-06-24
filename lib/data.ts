@@ -166,7 +166,8 @@ export const mediaItems: MediaItem[] = [
     title: "FM2 Sessions — Episode 1",
     description: "Raw studio performances from FM2 talent.",
     type: "music",
-    thumbnailUrl: "/images/media-placeholder-1.jpg",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop",
     externalUrl: "https://youtube.com",
     duration: "4:32",
     releaseDate: "2026-05-01",
@@ -178,7 +179,8 @@ export const mediaItems: MediaItem[] = [
     title: "Behind the Empire — Podcast Ep. 3",
     description: "Conversations on building creative careers in Africa.",
     type: "podcast",
-    thumbnailUrl: "/images/media-placeholder-2.jpg",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=800&auto=format&fit=crop",
     externalUrl: "https://open.spotify.com",
     duration: "38:12",
     releaseDate: "2026-04-15",
@@ -190,7 +192,8 @@ export const mediaItems: MediaItem[] = [
     title: "FM2 Showreel 2026",
     description: "A look at our biggest productions this year.",
     type: "video",
-    thumbnailUrl: "/images/media-placeholder-3.jpg",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop",
     externalUrl: "https://youtube.com",
     duration: "2:48",
     releaseDate: "2026-03-20",
@@ -202,7 +205,8 @@ export const mediaItems: MediaItem[] = [
     title: "Rising — Original Series",
     description: "The journey of three artists from streets to stage.",
     type: "series",
-    thumbnailUrl: "/images/media-placeholder-4.jpg",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=800&auto=format&fit=crop",
     externalUrl: "https://youtube.com",
     duration: "Episode 1",
     releaseDate: "2026-02-10",
@@ -214,7 +218,8 @@ export const mediaItems: MediaItem[] = [
     title: "Empire Nights — Live Set",
     description: "Live recording from our last showcase event.",
     type: "music",
-    thumbnailUrl: "/images/media-placeholder-5.jpg",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=800&auto=format&fit=crop",
     externalUrl: "https://open.spotify.com",
     duration: "12:05",
     releaseDate: "2026-01-28",
@@ -226,10 +231,37 @@ export const mediaItems: MediaItem[] = [
     title: "FM2 Visuals — Photo Story",
     description: "A visual journey through our latest production.",
     type: "photo",
-    thumbnailUrl: "/images/media-placeholder-6.jpg",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop",
     externalUrl: "https://instagram.com",
     releaseDate: "2026-01-10",
     isPremium: false,
+    isPublished: true,
+  },
+  {
+    id: "7",
+    title: "Studio Diaries — Episode 4",
+    description: "Inside the booth with FM2's newest signee.",
+    type: "podcast",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=800&auto=format&fit=crop",
+    externalUrl: "https://open.spotify.com",
+    duration: "29:47",
+    releaseDate: "2025-12-18",
+    isPremium: false,
+    isPublished: true,
+  },
+  {
+    id: "8",
+    title: "Empire Anthem — Official Video",
+    description: "The visual companion to FM2's 2025 anthem.",
+    type: "video",
+    thumbnailUrl:
+      "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=800&auto=format&fit=crop",
+    externalUrl: "https://youtube.com",
+    duration: "3:54",
+    releaseDate: "2025-11-30",
+    isPremium: true,
     isPublished: true,
   },
 ];
