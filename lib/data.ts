@@ -26,7 +26,7 @@ export const teamMembers: TeamMember[] = [
     bio: "Leads the overall creative vision and direction of FM2 Empire across all productions and talent initiatives.",
     longBio:
       "With a background spanning music production, brand strategy, and live events, [Founder Name] built FM2 Empire to close the gap between raw creative talent and the industry infrastructure needed to sustain a career. Their approach blends artistic instinct with operational discipline — every FM2 production reflects that balance.",
-    imageUrl: "/images/team-1.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
     socials: { instagram: "https://instagram.com" },
   },
   {
@@ -37,7 +37,7 @@ export const teamMembers: TeamMember[] = [
     bio: "Oversees artist onboarding, mentorship programs, and long-term career development for FM2 talent.",
     longBio:
       "[Co-Founder Name] designed FM2's talent development framework from the ground up — covering vocal coaching, brand positioning, and career planning. Their work ensures every artist who joins FM2 has a clear, structured path forward, not just a one-off production deal.",
-    imageUrl: "/images/team-2.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=600&auto=format&fit=crop",
     socials: { instagram: "https://instagram.com" },
   },
   {
@@ -48,7 +48,7 @@ export const teamMembers: TeamMember[] = [
     bio: "Directs music videos, podcasts, and original content across the FM2 media library.",
     longBio:
       "Responsible for everything that ends up in front of FM2's audience — from concept to final cut. [Team Member Name] leads a production process built for consistency at scale, without losing the creative edge that makes FM2's content stand out.",
-    imageUrl: "/images/team-3.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop",
     socials: { instagram: "https://instagram.com" },
   },
   {
@@ -59,7 +59,7 @@ export const teamMembers: TeamMember[] = [
     bio: "Manages FM2's live events calendar and strategic partnerships with brands and organisations.",
     longBio:
       "From intimate showcases to large-scale productions, [Team Member Name] handles the logistics, vendor relationships, and brand partnerships that make FM2 events run smoothly — and keeps the partnerships pipeline growing.",
-    imageUrl: "/images/team-4.jpg",
+    imageUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop",
     socials: { instagram: "https://instagram.com" },
   },
 ];
