@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com"
   ),
-  openGraph: {
+openGraph: {
     type: "website",
     locale: "en_NG",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com",
@@ -54,21 +54,12 @@ export const metadata: Metadata = {
     title: "FM2 Empire — Media, Talent & Creative Ecosystem",
     description:
       "FM2 Empire is a media, content, talent development, and creative ecosystem. We produce, develop, and amplify Africa's next generation of creative talent.",
-    images: [
-      {
-        url: "/images/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "FM2 Empire",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "FM2 Empire — Media, Talent & Creative Ecosystem",
     description:
       "FM2 Empire is a media, content, talent development, and creative ecosystem.",
-    images: ["/images/og-image.jpg"],
   },
   robots: {
     index: true,
