@@ -12,6 +12,7 @@ import Events from "@/components/sections/Events";
 import Team from "@/components/sections/Team";
 import Testimonials from "@/components/sections/Testimonials";
 import CTA from "@/components/sections/CTA";
+import FAQ from "@/components/sections/FAQ";
 
 export default function LandingPage() {
   return (
@@ -23,6 +24,7 @@ export default function LandingPage() {
       <Events />
       <Team />
       <Testimonials />
+      <FAQ />
       <CTA />
     </>
   );
