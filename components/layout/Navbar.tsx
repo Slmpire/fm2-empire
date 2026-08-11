@@ -23,6 +23,7 @@ const navLinks: NavLink[] = [
   { label: "Media",    href: "/media" },
   { label: "Events",   href: "/#events" },
   { label: "Team",     href: "/#team" },
+  { label: "Apply",    href: "/apply" },
 ];
 
 const mobileMenuVariants: Variants = {
