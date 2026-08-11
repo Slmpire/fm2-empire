@@ -170,7 +170,7 @@ export default function Navbar() {
               <Button href="/contact" variant="secondary" size="sm">
                 Get in Touch
               </Button>
-              <Button href="/#apply" variant="primary" size="sm">
+              <Button href="/apply" variant="primary" size="sm">
                 Join FM2
               </Button>
             </div>
@@ -257,7 +257,7 @@ export default function Navbar() {
                 transition={{ delay: 0.5, duration: 0.4 }}
               >
                 <Button
-                  href="/#apply"
+                  href="/apply"
                   variant="primary"
                   size="lg"
                   className="w-full justify-center"

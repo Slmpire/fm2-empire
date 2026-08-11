@@ -144,7 +144,7 @@ export default function Hero() {
             className="mb-12 flex w-full max-w-md flex-col items-center gap-3 px-1 sm:mb-14 sm:max-w-none sm:w-auto sm:flex-row sm:justify-center sm:gap-4 sm:px-0 lg:mb-16"
           >
             <Button
-              href="#apply"
+              href="/apply"
               variant="primary"
               size="lg"
               className="w-full justify-center sm:w-[340px] md:w-[240px]"

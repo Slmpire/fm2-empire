@@ -94,7 +94,7 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Button href="#apply" variant="primary" size="lg">
+            <Button href="/apply" variant="primary" size="lg">
               Join FM2 Today
             </Button>
             <Button href="#contact" variant="secondary" size="lg">
