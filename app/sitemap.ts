@@ -11,7 +11,7 @@ import { teamMembers, allEvents } from "@/lib/data";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com";
 
-  const staticRoutes = ["", "/about", "/contact", "/media", "/privacy", "/terms"].map(
+  const staticRoutes = ["", "/about", "/apply", "/contact", "/media", "/privacy", "/terms"].map(
     (route) => ({
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
