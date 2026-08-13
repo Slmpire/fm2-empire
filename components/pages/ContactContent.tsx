@@ -13,6 +13,7 @@ import { Mail, Phone, MapPin, Camera, Send, CheckCircle2 } from "lucide-react";
 import AnimatedText from "@/components/ui/AnimatedText";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
+import { supabase } from "@/lib/supabase";
 import { isValidEmail } from "@/lib/utils";
 
 export default function ContactContent() {
@@ -25,7 +26,7 @@ export default function ContactContent() {
     setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
     if (!form.name.trim()) newErrors.name = "Name is required";
@@ -37,11 +38,22 @@ export default function ContactContent() {
       return;
     }
 
-    // TODO: wire to Supabase `applications` table (type: 'general_inquiry')
-    // once the backend phase resumes. For now, this simulates success.
-    setIsSubmitted(true);
+    try {
+      const { error } = await supabase.from("applications").insert({
+        type: "general_inquiry",
+        status: "new",
+        full_name: form.name,
+        email: form.email,
+        subject: form.subject,
+        message: form.message,
+      });
+      if (error) throw error;
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error("Contact form error:", err);
+      setErrors({ name: "Something went wrong. Please try again." });
+    }
   };
-
   const contactDetails = [
     { icon: Mail, label: "Email", value: "hello@fm2empire.com", href: "mailto:hello@fm2empire.com" },
     { icon: Phone, label: "WhatsApp", value: "+234 XXX XXX XXXX", href: "https://wa.me/234XXXXXXXXX" },

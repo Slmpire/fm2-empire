@@ -16,6 +16,7 @@ import FormField from "@/components/ui/FormField";
 import FormSuccess from "@/components/forms/FormSuccess";
 import Button from "@/components/ui/Button";
 import { isValidEmail, isValidNigerianPhone } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 type FormData = {
   fullName: string;
@@ -120,22 +121,22 @@ export default function ServiceForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: supabase.from("applications").insert({
-      //   type: "service_request",
-      //   status: "new",
-      //   full_name: form.fullName,
-      //   email: form.email,
-      //   phone: form.phone,
-      //   organisation: form.organisation,
-      //   data: {
-      //     serviceNeeded: form.serviceNeeded,
-      //     projectDescription: form.projectDescription,
-      //     budget: form.budget,
-      //     timeline: form.timeline,
-      //     referralSource: form.referralSource,
-      //   },
-      // });
-      await new Promise((res) => setTimeout(res, 1000));
+      const { error } = await supabase.from("applications").insert({
+        type: "service_request",
+        status: "new",
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        organisation: form.organisation,
+        data: {
+          serviceNeeded: form.serviceNeeded,
+          projectDescription: form.projectDescription,
+          budget: form.budget,
+          timeline: form.timeline,
+          referralSource: form.referralSource,
+        },
+      });
+      if (error) throw error;
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);

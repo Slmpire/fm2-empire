@@ -15,6 +15,7 @@ import FormField from "@/components/ui/FormField";
 import FormSuccess from "@/components/forms/FormSuccess";
 import Button from "@/components/ui/Button";
 import { isValidEmail } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 type InquiryType = "partnership" | "collaboration" | "sponsorship" | "general_inquiry";
 
@@ -106,18 +107,18 @@ export default function PartnershipForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: supabase.from("applications").insert({
-      //   type: form.inquiryType,
-      //   status: "new",
-      //   full_name: form.fullName,
-      //   email: form.email,
-      //   phone: form.phone,
-      //   organisation: form.organisation,
-      //   subject: form.subject,
-      //   message: form.message,
-      //   data: { website: form.website },
-      // });
-      await new Promise((res) => setTimeout(res, 1000));
+      const { error } = await supabase.from("applications").insert({
+        type: form.inquiryType,
+        status: "new",
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        organisation: form.organisation,
+        subject: form.subject,
+        message: form.message,
+        data: { website: form.website },
+      });
+      if (error) throw error;
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);

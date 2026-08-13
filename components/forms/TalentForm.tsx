@@ -15,6 +15,7 @@ import FormField from "@/components/ui/FormField";
 import FormSuccess from "@/components/forms/FormSuccess";
 import Button from "@/components/ui/Button";
 import { isValidEmail, isValidNigerianPhone } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 type FormData = {
   fullName: string;
@@ -96,15 +97,26 @@ export default function TalentForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: supabase.from("applications").insert({
-      //   type: "talent_enrollment",
-      //   status: "new",
-      //   full_name: form.fullName,
-      //   email: form.email,
-      //   phone: form.phone,
-      //   data: { stageName, category, genre, city, bio, instagram, youtube, spotify, tiktok, portfolioUrl }
-      // });
-      await new Promise((res) => setTimeout(res, 1000));
+      const { error } = await supabase.from("applications").insert({
+        type: "talent_enrollment",
+        status: "new",
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        data: {
+          stageName: form.stageName,
+          category: form.category,
+          genre: form.genre,
+          city: form.city,
+          bio: form.bio,
+          instagram: form.instagram,
+          youtube: form.youtube,
+          spotify: form.spotify,
+          tiktok: form.tiktok,
+          portfolioUrl: form.portfolioUrl,
+        },
+      });
+      if (error) throw error;
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);
