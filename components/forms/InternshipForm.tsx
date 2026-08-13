@@ -16,6 +16,7 @@ import FormField from "@/components/ui/FormField";
 import FormSuccess from "@/components/forms/FormSuccess";
 import Button from "@/components/ui/Button";
 import { isValidEmail, isValidNigerianPhone } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 // ------------------------------------------------------------
 // TYPES
@@ -126,27 +127,23 @@ export default function InternshipForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: replace this block with Supabase insert when ready:
-      // const { error } = await supabase.from("applications").insert({
-      //   type: "internship",
-      //   status: "new",
-      //   full_name: form.fullName,
-      //   email: form.email,
-      //   phone: form.phone,
-      //   data: {
-      //     university: form.university,
-      //     course: form.course,
-      //     year: form.year,
-      //     department: form.department,
-      //     portfolioUrl: form.portfolioUrl,
-      //     resumeUrl: form.resumeUrl,
-      //     coverLetter: form.coverLetter,
-      //   },
-      // });
-      // if (error) throw error;
-
-      // Simulate network delay until Supabase is connected
-      await new Promise((res) => setTimeout(res, 1000));
+    const { error } = await supabase.from("applications").insert({
+        type: "internship",
+        status: "new",
+        full_name: form.fullName,
+        email: form.email,
+        phone: form.phone,
+        data: {
+          university: form.university,
+          course: form.course,
+          year: form.year,
+          department: form.department,
+          portfolioUrl: form.portfolioUrl,
+          resumeUrl: form.resumeUrl,
+          coverLetter: form.coverLetter,
+        },
+      });
+      if (error) throw error;
       setIsSubmitted(true);
     } catch (err) {
       console.error("Submission error:", err);
