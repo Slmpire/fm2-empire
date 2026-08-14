@@ -48,6 +48,16 @@ export default function ContactContent() {
         message: form.message,
       });
       if (error) throw error;
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contact",
+          name: form.name,
+          email: form.email,
+          summary: `Subject: ${form.subject || "No subject"}. Message: ${form.message.slice(0, 200)}...`,
+        }),
+      });
       setIsSubmitted(true);
     } catch (err) {
       console.error("Contact form error:", err);
