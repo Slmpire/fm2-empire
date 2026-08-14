@@ -119,6 +119,16 @@ export default function PartnershipForm() {
         data: { website: form.website },
       });
       if (error) throw error;
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: form.inquiryType,
+          name: form.fullName,
+          email: form.email,
+          summary: `Subject: ${form.subject}. Organisation: ${form.organisation || "Not specified"}.`,
+        }),
+      });
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);
