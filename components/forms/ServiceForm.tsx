@@ -137,6 +137,16 @@ export default function ServiceForm() {
         },
       });
       if (error) throw error;
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "service_request",
+          name: form.fullName,
+          email: form.email,
+          summary: `Service needed: ${form.serviceNeeded}. Budget: ${form.budget || "Not specified"}. Timeline: ${form.timeline || "Not specified"}.`,
+        }),
+      });
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);
