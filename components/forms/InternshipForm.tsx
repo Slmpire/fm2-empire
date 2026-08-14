@@ -127,7 +127,7 @@ export default function InternshipForm() {
     setIsSubmitting(true);
 
     try {
-    const { error } = await supabase.from("applications").insert({
+      const { error } = await supabase.from("applications").insert({
         type: "internship",
         status: "new",
         full_name: form.fullName,
@@ -144,6 +144,18 @@ export default function InternshipForm() {
         },
       });
       if (error) throw error;
+
+      // Send confirmation + internal alert emails
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "internship",
+          name: form.fullName,
+          email: form.email,
+          summary: `Applying for the ${form.department} department. Currently at ${form.university}, studying ${form.course} (${form.year} level).`,
+        }),
+      });
       setIsSubmitted(true);
     } catch (err) {
       console.error("Submission error:", err);
