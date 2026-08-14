@@ -117,6 +117,16 @@ export default function TalentForm() {
         },
       });
       if (error) throw error;
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "talent_enrollment",
+          name: form.fullName,
+          email: form.email,
+          summary: `Category: ${form.category}. Genre/Niche: ${form.genre || "Not specified"}. Based in ${form.city}.`,
+        }),
+      });
       setIsSubmitted(true);
     } catch (err) {
       console.error(err);
