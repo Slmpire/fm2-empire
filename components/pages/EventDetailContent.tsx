@@ -1,25 +1,94 @@
 // ============================================================
-// FM2 EMPIRE — EVENT DETAIL CONTENT
-// Full event info before checkout: date, venue, address,
-// lineup, full description — THEN a "Get Tickets" button.
-// Buy flow itself is wired to Paystack in a later backend
-// phase; for now the button opens a "Coming Soon" state.
+// FM2 EMPIRE — EVENT DETAIL CONTENT (with Paystack checkout)
+// Clicking "Get Tickets" opens a checkout form that collects
+// buyer details, then initializes a Paystack payment.
 // ============================================================
 
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Calendar, MapPin, Clock, ArrowLeft, Ticket, X } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowLeft, Ticket, X, Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { formatDate } from "@/lib/utils";
+import { formatDate, isValidEmail, isValidNigerianPhone } from "@/lib/utils";
 import { allEvents } from "@/lib/data";
 import type { Event } from "@/types/index";
 
 export default function EventDetailContent({ event }: { event: Event }) {
-  const [showCheckoutNotice, setShowCheckoutNotice] = useState(false);
-  const otherEvents = allEvents.filter((e) => e.slug !== event.slug).slice(0, 3);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [isLoading,    setIsLoading]    = useState(false);
+  const [error,        setError]        = useState("");
+
+  const [form, setForm] = useState({
+    fullName: "",
+    email:    "",
+    phone:    "",
+    quantity: 1,
+  });
+
+  const otherEvents = allEvents
+    .filter((e) => e.slug !== event.slug)
+    .slice(0, 3);
+
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!form.fullName.trim()) { setError("Full name is required"); return; }
+    if (!isValidEmail(form.email)) { setError("A valid email is required"); return; }
+    if (form.phone && !isValidNigerianPhone(form.phone)) { setError("Enter a valid Nigerian phone number"); return; }
+
+    setIsLoading(true);
+
+    try {
+      const res  = await fetch("/api/paystack/initialize", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+          eventSlug: event.slug,
+          fullName:  form.fullName,
+          email:     form.email,
+          phone:     form.phone,
+          quantity:  form.quantity,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.error ?? "Failed to initialize payment. Please try again.");
+        return;
+      }
+
+      // Redirect to Paystack hosted checkout
+      window.location.href = data.paymentUrl;
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const inputStyle = {
+    width:           "100%",
+    padding:         "0.75rem 1rem",
+    backgroundColor: "var(--color-fm2-black)",
+    border:          "1px solid var(--color-fm2-border)",
+    borderRadius:    "8px",
+    color:           "var(--color-fm2-white)",
+    fontSize:        "0.875rem",
+    outline:         "none",
+    boxSizing:       "border-box" as const,
+  };
+
+  const labelStyle = {
+    fontSize:    "0.75rem",
+    fontWeight:  600,
+    color:       "var(--color-fm2-white)",
+    display:     "block",
+    marginBottom: "0.375rem",
+  };
 
   return (
     <>
@@ -34,7 +103,6 @@ export default function EventDetailContent({ event }: { event: Event }) {
             className="absolute inset-0"
             style={{ background: "linear-gradient(180deg, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0.5) 60%, var(--color-fm2-black) 100%)" }}
           />
-
           <div className="absolute inset-0 flex flex-col justify-end">
             <div className="container-fm2 pb-10">
               <Link
@@ -105,7 +173,6 @@ export default function EventDetailContent({ event }: { event: Event }) {
             {/* Sticky info card */}
             <div className="lg:col-span-1">
               <div className="card-surface flex flex-col gap-5 lg:sticky lg:top-28">
-
                 <div className="flex items-start gap-3">
                   <Calendar size={18} className="shrink-0 mt-0.5" style={{ color: "var(--color-fm2-gold)" }} />
                   <div className="flex flex-col">
@@ -147,7 +214,9 @@ export default function EventDetailContent({ event }: { event: Event }) {
                 >
                   <span className="text-sm" style={{ color: "var(--color-fm2-muted)" }}>Price</span>
                   <span className="font-display font-bold text-xl" style={{ color: "var(--color-fm2-white)" }}>
-                    {event.ticketPrice === 0 ? "Free" : `₦${event.ticketPrice.toLocaleString()}`}
+                    {event.ticketPrice === 0
+                      ? "Free"
+                      : `₦${event.ticketPrice.toLocaleString()}`}
                   </span>
                 </div>
 
@@ -155,12 +224,11 @@ export default function EventDetailContent({ event }: { event: Event }) {
                   variant="primary"
                   size="lg"
                   leftIcon={<Ticket size={16} />}
-                  onClick={() => setShowCheckoutNotice(true)}
+                  onClick={() => setShowCheckout(true)}
                   className="justify-center"
                 >
                   {event.ticketPrice === 0 ? "Reserve a Spot" : "Get Tickets"}
                 </Button>
-
               </div>
             </div>
 
@@ -203,44 +271,143 @@ export default function EventDetailContent({ event }: { event: Event }) {
         </section>
       )}
 
-      {/* ---- "COMING SOON" CHECKOUT NOTICE ---- */}
-      {showCheckoutNotice && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          style={{ backgroundColor: "rgba(8,8,8,0.85)" }}
-          onClick={() => setShowCheckoutNotice(false)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="card-surface max-w-sm w-full flex flex-col items-center text-center gap-4 relative"
-            onClick={(e) => e.stopPropagation()}
+      {/* ---- CHECKOUT MODAL ---- */}
+      <AnimatePresence>
+        {showCheckout && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(8,8,8,0.9)" }}
+            onClick={() => !isLoading && setShowCheckout(false)}
           >
-            <button
-              onClick={() => setShowCheckoutNotice(false)}
-              className="absolute top-4 right-4"
-              style={{ color: "var(--color-fm2-muted)" }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.25 }}
+              className="card-surface w-full max-w-md relative"
+              onClick={(e) => e.stopPropagation()}
             >
-              <X size={18} />
-            </button>
-            <div
-              className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)" }}
-            >
-              <Ticket size={20} style={{ color: "var(--color-fm2-gold)" }} />
-            </div>
-            <h3 className="font-display font-bold text-lg" style={{ color: "var(--color-fm2-white)" }}>
-              Checkout Coming Soon
-            </h3>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--color-fm2-muted)" }}>
-              Online ticket payments are being set up. In the meantime, contact our team directly to reserve your spot.
-            </p>
-            <Button href="/contact" variant="primary" size="md" className="w-full justify-center">
-              Contact Us
-            </Button>
-          </motion.div>
-        </div>
-      )}
+              {/* Header */}
+              <div
+                className="flex items-center justify-between pb-5 mb-5 border-b"
+                style={{ borderColor: "var(--color-fm2-border)" }}
+              >
+                <div>
+                  <h3
+                    className="font-display font-bold text-lg"
+                    style={{ color: "var(--color-fm2-white)" }}
+                  >
+                    Get Tickets
+                  </h3>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--color-fm2-gold)" }}>
+                    {event.title}
+                  </p>
+                </div>
+                <button
+                  onClick={() => !isLoading && setShowCheckout(false)}
+                  style={{ color: "var(--color-fm2-muted)", background: "none", border: "none", cursor: "pointer" }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleCheckout} style={{ display: "flex", flexDirection: "column", gap: "1.125rem" }}>
+                <div>
+                  <label style={labelStyle}>Full Name *</label>
+                  <input
+                    type="text"
+                    value={form.fullName}
+                    onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))}
+                    placeholder="Your full name"
+                    required
+                    style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Email Address *</label>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+                    placeholder="Ticket will be sent here"
+                    required
+                    style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Phone Number</label>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+                    placeholder="08012345678 (optional)"
+                    style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Number of Tickets</label>
+                  <select
+                    value={form.quantity}
+                    onChange={(e) => setForm((p) => ({ ...p, quantity: Number(e.target.value) }))}
+                    style={inputStyle}
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>{n} {n === 1 ? "ticket" : "tickets"}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Order summary */}
+                <div
+                  className="rounded-lg p-4 flex items-center justify-between"
+                  style={{ backgroundColor: "var(--color-fm2-black)", border: "1px solid var(--color-fm2-border)" }}
+                >
+                  <span className="text-sm" style={{ color: "var(--color-fm2-muted)" }}>
+                    {form.quantity} × ₦{event.ticketPrice.toLocaleString()}
+                  </span>
+                  <span className="font-display font-bold text-lg" style={{ color: "var(--color-fm2-gold)" }}>
+                    ₦{(event.ticketPrice * form.quantity).toLocaleString()}
+                  </span>
+                </div>
+
+                {error && (
+                  <p className="text-xs" style={{ color: "var(--color-fm2-red)" }}>{error}</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  style={{
+                    padding:         "0.875rem",
+                    backgroundColor: isLoading ? "#888880" : "var(--color-fm2-gold)",
+                    color:           "var(--color-fm2-black)",
+                    border:          "none",
+                    borderRadius:    "8px",
+                    fontSize:        "0.875rem",
+                    fontWeight:      700,
+                    cursor:          isLoading ? "not-allowed" : "pointer",
+                    display:         "flex",
+                    alignItems:      "center",
+                    justifyContent:  "center",
+                    gap:             "8px",
+                  }}
+                >
+                  {isLoading && <Loader2 size={16} className="animate-spin" />}
+                  {isLoading ? "Redirecting to Paystack..." : "Pay Now"}
+                </button>
+
+                <p className="text-xs text-center" style={{ color: "var(--color-fm2-muted)" }}>
+                  Secured by Paystack. Your card details are never stored on our servers.
+                </p>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
