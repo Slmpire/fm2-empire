@@ -1,16 +1,13 @@
 // ============================================================
 // FM2 EMPIRE — ROOT LAYOUT
-// Navbar and Footer now live here, so they render on every
-// page — home, /about, /media, /contact, /team/[slug],
-// /events/[slug] — not just the homepage.
+// ConditionalLayout handles whether to show Navbar/Footer.
+// Admin pages get their own sidebar/header instead.
 // ============================================================
 
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import ChatWidget from "@/components/chat/ChatWidget";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,14 +43,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com"
   ),
-openGraph: {
+  openGraph: {
     type: "website",
     locale: "en_NG",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com",
     siteName: "FM2 Empire",
     title: "FM2 Empire — Media, Talent & Creative Ecosystem",
     description:
-      "FM2 Empire is a media, content, talent development, and creative ecosystem. We produce, develop, and amplify Africa's next generation of creative talent.",
+      "FM2 Empire is a media, content, talent development, and creative ecosystem.",
   },
   twitter: {
     card: "summary_large_image",
@@ -93,10 +90,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={inter.className}>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-        <ChatWidget />
+        <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
   );
