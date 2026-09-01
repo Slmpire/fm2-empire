@@ -1,46 +1,71 @@
 // ============================================================
 // FM2 EMPIRE — ADMIN LAYOUT
-// Wraps every /admin page except /admin/login.
-// Sidebar left, main content right.
-// Login page gets its own minimal layout via the conditional.
+// No html/body tags here — those live in the root layout.
+// This just adds the sidebar + header shell around admin pages.
+// Login page gets no sidebar — handled via pathname check.
 // ============================================================
 
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+"use client";
+
+import { usePathname } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: {
-    default: "FM2 Admin",
-    template: "%s | FM2 Admin",
-  },
-  robots: { index: false, follow: false },
-};
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body
-        className={inter.className}
-        style={{ margin: 0, backgroundColor: "#080808", color: "#F5F5F0" }}
+  const pathname = usePathname();
+  const isLogin  = pathname === "/admin/login";
+
+  // Login page gets a clean centered layout — no sidebar
+  if (isLogin) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: "#080808",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "1rem",
+        }}
       >
-        <div style={{ display: "flex", minHeight: "100vh" }}>
-          <AdminSidebar />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
-            <AdminHeader />
-            <main style={{ flex: 1, padding: "2rem", overflowY: "auto" }}>
-              {children}
-            </main>
-          </div>
-        </div>
-      </body>
-    </html>
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+        backgroundColor: "#080808",
+      }}
+    >
+      <AdminSidebar />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+          overflow: "hidden",
+        }}
+      >
+        <AdminHeader />
+        <main
+          style={{
+            flex: 1,
+            padding: "2rem",
+            overflowY: "auto",
+          }}
+        >
+          {children}
+        </main>
+      </div>
+    </div>
   );
 }
