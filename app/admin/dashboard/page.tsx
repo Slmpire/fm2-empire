@@ -6,15 +6,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Inbox,
-  Eye,
-  Star,
-  CheckCircle2,
-  XCircle,
-  Users,
-  ArrowRight,
-} from "lucide-react";
+import { Users, ArrowRight } from "lucide-react";
 import StatsCard from "@/components/admin/StatsCard";
 import { getDashboardStats } from "@/lib/admin";
 import { formatDate } from "@/lib/utils";
@@ -58,18 +50,13 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-8">
 
       {/* ---- STATS ROW ---- */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatsCard
-          label="Total"
-          value={stats.total}
-          icon={Inbox}
-          accent
-        />
-        <StatsCard label="New"         value={stats.new}         icon={Inbox} />
-        <StatsCard label="Reviewing"   value={stats.reviewing}   icon={Eye} />
-        <StatsCard label="Shortlisted" value={stats.shortlisted} icon={Star} />
-        <StatsCard label="Approved"    value={stats.approved}    icon={CheckCircle2} />
-        <StatsCard label="Rejected"    value={stats.rejected}    icon={XCircle} />
+           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <StatsCard label="Total"       value={stats.total}       accent />
+        <StatsCard label="New"         value={stats.new} />
+        <StatsCard label="Reviewing"   value={stats.reviewing} />
+        <StatsCard label="Shortlisted" value={stats.shortlisted} />
+        <StatsCard label="Approved"    value={stats.approved} />
+        <StatsCard label="Rejected"    value={stats.rejected} />
       </div>
 
       {/* ---- CONTENT ROW ---- */}
