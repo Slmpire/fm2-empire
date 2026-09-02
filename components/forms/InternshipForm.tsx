@@ -157,9 +157,10 @@ export default function InternshipForm() {
         }),
       });
       setIsSubmitted(true);
-    } catch (err) {
-      console.error("Submission error:", err);
-      setErrors({ fullName: "Something went wrong. Please try again." });
+     } catch (err) {
+      console.error("Submission error:", JSON.stringify(err));
+      const supaErr = err as { message?: string; code?: string };
+      setErrors({ fullName: supaErr?.message ?? "Something went wrong. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
