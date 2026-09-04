@@ -1,7 +1,7 @@
 // ============================================================
 // FM2 EMPIRE — ADMIN TEAM PAGE
-// Lists all team members from lib/data.ts.
-// Edit content there until full CMS is built.
+// Made fully compatible with server components — no event
+// handlers on img tags. Avatar display simplified.
 // ============================================================
 
 import type { Metadata } from "next";
@@ -56,25 +56,22 @@ export default function AdminTeamPage() {
             className="flex items-start gap-4 rounded-xl border p-5"
             style={{ backgroundColor: "#1A1A1A", borderColor: "#2A2A2A" }}
           >
-            {/* Avatar */}
+            {/* Avatar — initials only, no img tag with onError */}
             <div
-              className="w-12 h-12 rounded-full overflow-hidden shrink-0 flex items-center justify-center"
+              className="w-12 h-12 rounded-full shrink-0 flex items-center justify-center"
               style={{
                 backgroundColor: "rgba(201,168,76,0.08)",
-                border: "1px solid rgba(201,168,76,0.2)",
+                border:          "1px solid rgba(201,168,76,0.2)",
+                minWidth:        "3rem",
               }}
             >
-              <img
-                src={member.imageUrl}
-                alt={member.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = "none";
-                }}
-              />
               <span
-                className="font-bold text-sm absolute"
-                style={{ color: "#C9A84C" }}
+                style={{
+                  fontWeight:  700,
+                  fontSize:    "0.875rem",
+                  color:       "#C9A84C",
+                  fontFamily:  "Georgia, serif",
+                }}
               >
                 {getInitials(member.name)}
               </span>
@@ -95,14 +92,37 @@ export default function AdminTeamPage() {
                 {member.role}
               </span>
               <p
-                className="text-xs leading-relaxed mt-1 line-clamp-2"
-                style={{ color: "#888880" }}
+                className="text-xs leading-relaxed mt-1"
+                style={{
+                  color:     "#888880",
+                  overflow:  "hidden",
+                  display:   "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                } as React.CSSProperties}
               >
                 {member.bio}
               </p>
+
+              {/* Social links */}
+              {member.socials && (
+                <div className="flex gap-3 mt-2">
+                  {member.socials.instagram && (
+                    
+                     <a href={member.socials.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs"
+                      style={{ color: "#C9A84C" }}
+                    >
+                      Instagram ↗
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Link */}
+            {/* Profile link */}
             <Link
               href={`/team/${member.slug}`}
               target="_blank"
