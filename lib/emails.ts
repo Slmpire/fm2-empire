@@ -246,3 +246,156 @@ export function internalAlertEmail(
     </a>
   `);
 }
+
+// ------------------------------------------------------------
+// STATUS CHANGE EMAILS
+// Sent to applicants when FM2 team moves them in the pipeline.
+// ------------------------------------------------------------
+
+export function shortlistedEmail(name: string, type: string): string {
+  const typeLabels: Record<string, string> = {
+    internship:        "Internship Program",
+    talent_enrollment: "Talent Development",
+    service_request:   "Service Request",
+    partnership:       "Partnership",
+    collaboration:     "Collaboration",
+    sponsorship:       "Sponsorship",
+    general_inquiry:   "General Inquiry",
+  };
+
+  return baseTemplate(`
+    <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:${colors.white};font-family:Georgia,serif;">
+      You&rsquo;ve Been Shortlisted
+    </h1>
+    <p style="margin:0 0 24px;font-size:13px;color:${colors.gold};text-transform:uppercase;letter-spacing:0.1em;">
+      ${typeLabels[type] ?? type}
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.white};line-height:1.6;">
+      Hi ${name},
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      Great news — after reviewing your application, our team has shortlisted you for the next stage of our process.
+    </p>
+    <p style="margin:0 0 24px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      We will be in touch shortly with the next steps. In the meantime, feel free to explore more of what FM2 Empire is about.
+    </p>
+    <a href="https://fm2empire.com" style="display:inline-block;padding:12px 24px;background-color:${colors.gold};color:${colors.black};font-size:14px;font-weight:700;text-decoration:none;border-radius:6px;">
+      Visit FM2 Empire
+    </a>
+  `);
+}
+
+export function approvedEmail(name: string, type: string): string {
+  const typeLabels: Record<string, string> = {
+    internship:        "Internship Program",
+    talent_enrollment: "Talent Development",
+    service_request:   "Service Request",
+    partnership:       "Partnership",
+    collaboration:     "Collaboration",
+    sponsorship:       "Sponsorship",
+    general_inquiry:   "General Inquiry",
+  };
+
+  const nextSteps: Record<string, string> = {
+    internship:
+      "Our team will reach out within 2 business days to discuss your start date, schedule, and onboarding details.",
+    talent_enrollment:
+      "Our A&R team will contact you shortly to discuss your development plan and next steps for joining the FM2 roster.",
+    service_request:
+      "Our production team will be in touch within 2 business days to finalise scope, timeline, and payment details.",
+    partnership:
+      "Our partnerships team will reach out shortly to discuss the details of our collaboration.",
+    collaboration:
+      "Our creative team will be in touch soon to kick off the collaboration.",
+    sponsorship:
+      "Our events team will contact you to finalise the sponsorship agreement and details.",
+    general_inquiry:
+      "Our team will be in touch with you shortly.",
+  };
+
+  return baseTemplate(`
+    <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:${colors.white};font-family:Georgia,serif;">
+      Welcome to FM2 Empire
+    </h1>
+    <p style="margin:0 0 24px;font-size:13px;color:${colors.gold};text-transform:uppercase;letter-spacing:0.1em;">
+      ${typeLabels[type] ?? type} — Approved
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.white};line-height:1.6;">
+      Hi ${name},
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      We are pleased to let you know that your application has been <strong style="color:${colors.white};">approved</strong>.
+    </p>
+    <p style="margin:0 0 24px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      ${nextSteps[type] ?? nextSteps.general_inquiry}
+    </p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr>
+        <td style="padding:16px;background-color:${colors.dark};border:1px solid ${colors.border};border-left:3px solid ${colors.gold};border-radius:6px;">
+          <p style="margin:0;font-size:14px;color:${colors.muted};line-height:1.6;">
+            Please keep an eye on this email address for further communication from our team. If you have any questions in the meantime, reply directly to this email or visit our contact page.
+          </p>
+        </td>
+      </tr>
+    </table>
+    <a href="https://fm2empire.com" style="display:inline-block;padding:12px 24px;background-color:${colors.gold};color:${colors.black};font-size:14px;font-weight:700;text-decoration:none;border-radius:6px;">
+      Visit FM2 Empire
+    </a>
+  `);
+}
+
+export function rejectedEmail(name: string, type: string): string {
+  const typeLabels: Record<string, string> = {
+    internship:        "Internship Program",
+    talent_enrollment: "Talent Development",
+    service_request:   "Service Request",
+    partnership:       "Partnership",
+    collaboration:     "Collaboration",
+    sponsorship:       "Sponsorship",
+    general_inquiry:   "General Inquiry",
+  };
+
+  return baseTemplate(`
+    <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:${colors.white};font-family:Georgia,serif;">
+      Thank You for Applying
+    </h1>
+    <p style="margin:0 0 24px;font-size:13px;color:${colors.gold};text-transform:uppercase;letter-spacing:0.1em;">
+      ${typeLabels[type] ?? type}
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.white};line-height:1.6;">
+      Hi ${name},
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      Thank you for taking the time to apply to FM2 Empire. After careful consideration, we are unable to move forward with your application at this time.
+    </p>
+    <p style="margin:0 0 24px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      This does not reflect the quality of your work — it simply means the timing or fit wasn't right for this particular cycle. We encourage you to apply again in the future as FM2 continues to grow.
+    </p>
+    <p style="margin:0 0 24px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      We wish you the very best in your creative journey.
+    </p>
+    <a href="https://fm2empire.com/media" style="display:inline-block;padding:12px 24px;background-color:${colors.gold};color:${colors.black};font-size:14px;font-weight:700;text-decoration:none;border-radius:6px;">
+      Explore FM2 Media
+    </a>
+  `);
+}
+
+export function reviewingEmail(name: string): string {
+  return baseTemplate(`
+    <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:${colors.white};font-family:Georgia,serif;">
+      Your Application is Under Review
+    </h1>
+    <p style="margin:0 0 24px;font-size:13px;color:${colors.gold};text-transform:uppercase;letter-spacing:0.1em;">
+      Application Update
+    </p>
+    <p style="margin:0 0 16px;font-size:15px;color:${colors.white};line-height:1.6;">
+      Hi ${name},
+    </p>
+    <p style="margin:0 0 24px;font-size:15px;color:${colors.muted};line-height:1.6;">
+      We wanted to let you know that your application is currently being reviewed by our team. We will be in touch once a decision has been made.
+    </p>
+    <a href="https://fm2empire.com" style="display:inline-block;padding:12px 24px;background-color:${colors.gold};color:${colors.black};font-size:14px;font-weight:700;text-decoration:none;border-radius:6px;">
+      Visit FM2 Empire
+    </a>
+  `);
+}
