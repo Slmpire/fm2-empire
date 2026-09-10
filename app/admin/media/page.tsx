@@ -1,25 +1,15 @@
 // ============================================================
 // FM2 EMPIRE — ADMIN MEDIA PAGE
-// Lists all media items from lib/data.ts.
-// Full upload/edit via Supabase + Cloudinary comes later.
+// Now reads from Supabase instead of lib/data.ts.
+// Each item links to its edit page. Add button at top.
 // ============================================================
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ExternalLink, Music, Film, Mic, Image as ImageIcon } from "lucide-react";
-import { mediaItems } from "@/lib/data";
-import type { MediaType } from "@/types/index";
+import { Plus, ExternalLink, Pencil } from "lucide-react";
+import { adminGetAllMedia } from "@/lib/cms";
 
 export const metadata: Metadata = { title: "Media" };
-
-const TYPE_ICONS: Record<MediaType, React.ElementType> = {
-  music: Music,
-  video: Film,
-  podcast: Mic,
-  series: Film,
-  show: Film,
-  photo: ImageIcon,
-};
 
 const TYPE_COLOURS: Record<string, string> = {
   music:   "#C9A84C",
@@ -30,7 +20,19 @@ const TYPE_COLOURS: Record<string, string> = {
   photo:   "#27AE60",
 };
 
-export default function AdminMediaPage() {
+export default async function AdminMediaPage() {
+  let mediaItems: Awaited<ReturnType<typeof adminGetAllMedia>> = [];
+
+  try {
+    mediaItems = await adminGetAllMedia();
+  } catch {
+    return (
+      <div style={{ color: "#C0392B" }}>
+        Failed to load media. Check your Supabase service role key.
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
 
@@ -43,138 +45,169 @@ export default function AdminMediaPage() {
             Media Library
           </h2>
           <p className="text-sm" style={{ color: "#888880" }}>
-            All published media items. Edit content in{" "}
-            <code
-              className="px-1.5 py-0.5 rounded text-xs"
-              style={{ backgroundColor: "#2A2A2A", color: "#C9A84C" }}
-            >
-              lib/data.ts
-            </code>{" "}
-            until the full media CMS is built.
+            {mediaItems.length} item{mediaItems.length !== 1 ? "s" : ""} — click any row to edit, or add a new one.
           </p>
         </div>
-        <Link
-          href="/media"
-          target="_blank"
-          className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg transition-colors duration-150"
-          style={{
-            backgroundColor: "#1A1A1A",
-            border: "1px solid #2A2A2A",
-            color: "#888880",
-          }}
-        >
-          <ExternalLink size={13} /> View Library
-        </Link>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href="/media"
+            target="_blank"
+            className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg"
+            style={{ backgroundColor: "#1A1A1A", border: "1px solid #2A2A2A", color: "#888880" }}
+          >
+            <ExternalLink size={13} /> View Public
+          </Link>
+          <Link
+            href="/admin/media/new"
+            className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg font-semibold"
+            style={{ backgroundColor: "#C9A84C", color: "#080808" }}
+          >
+            <Plus size={13} /> Add Media
+          </Link>
+        </div>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-        {(["music", "video", "podcast", "series", "photo", "show"] as MediaType[]).map((type) => {
-          const count = mediaItems.filter((m) => m.type === type).length;
-          const Icon = TYPE_ICONS[type];
-          return (
-            <div
-              key={type}
-              className="flex flex-col items-center gap-2 p-3 rounded-lg"
-              style={{ backgroundColor: "#1A1A1A", border: "1px solid #2A2A2A" }}
-            >
-              <Icon size={16} style={{ color: TYPE_COLOURS[type] ?? "#888880" }} />
-              <span className="text-xl font-bold" style={{ color: "#F5F5F0" }}>
-                {count}
-              </span>
-              <span className="text-xs capitalize" style={{ color: "#888880" }}>
-                {type}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Media list */}
       <div
         className="rounded-xl border overflow-hidden"
         style={{ borderColor: "#2A2A2A" }}
       >
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: "1px solid #2A2A2A", backgroundColor: "#111111" }}>
-              {["Title", "Type", "Premium", "Published", "Link"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: "0.75rem 1rem",
-                    textAlign: "left",
-                    fontSize: "0.7rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    color: "#888880",
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {mediaItems.map((item, index) => {
-              const Icon = TYPE_ICONS[item.type];
-              return (
+        {mediaItems.length === 0 ? (
+          <div style={{ padding: "3rem", textAlign: "center" }}>
+            <p style={{ color: "#888880", fontSize: "0.875rem", marginBottom: "1rem" }}>
+              No media items yet.
+            </p>
+            <Link
+              href="/admin/media/new"
+              style={{
+                display:         "inline-flex",
+                alignItems:      "center",
+                gap:             "6px",
+                padding:         "0.625rem 1.25rem",
+                backgroundColor: "#C9A84C",
+                borderRadius:    "8px",
+                color:           "#080808",
+                fontSize:        "0.813rem",
+                fontWeight:      700,
+                textDecoration:  "none",
+              }}
+            >
+              <Plus size={14} /> Add Your First Media Item
+            </Link>
+          </div>
+        ) : (
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid #2A2A2A", backgroundColor: "#111111" }}>
+                {["#", "Title", "Type", "Premium", "Status", ""].map((h) => (
+                  <th
+                    key={h}
+                    style={{
+                      padding:       "0.75rem 1rem",
+                      textAlign:     "left",
+                      fontSize:      "0.7rem",
+                      fontWeight:    600,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color:         "#888880",
+                    }}
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {mediaItems.map((item, index) => (
                 <tr
                   key={item.id}
                   style={{
-                    borderBottom:
-                      index < mediaItems.length - 1 ? "1px solid #2A2A2A" : "none",
+                    borderBottom: index < mediaItems.length - 1 ? "1px solid #2A2A2A" : "none",
                   }}
                 >
+                  <td style={{ padding: "0.875rem 1rem", color: "#888880", fontSize: "0.75rem" }}>
+                    {item.sort_order}
+                  </td>
                   <td style={{ padding: "0.875rem 1rem" }}>
-                    <div className="flex flex-col gap-0.5">
-                      <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "#F5F5F0" }}>
-                        {item.title}
-                      </span>
-                      {item.duration && (
-                        <span style={{ fontSize: "0.75rem", color: "#888880" }}>
-                          {item.duration}
-                        </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      {item.thumbnail_url && (
+                        <img
+                          src={item.thumbnail_url}
+                          alt={item.title}
+                          style={{
+                            width:        "48px",
+                            height:       "30px",
+                            objectFit:    "cover",
+                            borderRadius: "4px",
+                            border:       "1px solid #2A2A2A",
+                            flexShrink:   0,
+                          }}
+                        />
                       )}
+                      <div>
+                        <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: 500, color: "#F5F5F0" }}>
+                          {item.title}
+                        </p>
+                        {item.duration && (
+                          <p style={{ margin: 0, fontSize: "0.7rem", color: "#888880" }}>
+                            {item.duration}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td style={{ padding: "0.875rem 1rem" }}>
                     <span
-                      className="flex items-center gap-1.5 text-xs font-medium capitalize"
-                      style={{ color: TYPE_COLOURS[item.type] ?? "#888880" }}
+                      style={{
+                        fontSize:        "0.7rem",
+                        fontWeight:      600,
+                        textTransform:   "capitalize",
+                        color:           TYPE_COLOURS[item.type] ?? "#888880",
+                        backgroundColor: `${TYPE_COLOURS[item.type] ?? "#888880"}15`,
+                        padding:         "0.2rem 0.5rem",
+                        borderRadius:    "4px",
+                      }}
                     >
-                      <Icon size={12} /> {item.type}
+                      {item.type}
+                    </span>
+                  </td>
+                  <td style={{ padding: "0.875rem 1rem", fontSize: "0.8rem", color: item.is_premium ? "#C9A84C" : "#888880" }}>
+                    {item.is_premium ? "Yes" : "No"}
+                  </td>
+                  <td style={{ padding: "0.875rem 1rem" }}>
+                    <span
+                      style={{
+                        fontSize:        "0.7rem",
+                        fontWeight:      600,
+                        color:           item.is_published ? "#27AE60" : "#C0392B",
+                        backgroundColor: item.is_published ? "rgba(39,174,96,0.1)" : "rgba(192,57,43,0.1)",
+                        padding:         "0.2rem 0.5rem",
+                        borderRadius:    "4px",
+                      }}
+                    >
+                      {item.is_published ? "Live" : "Draft"}
                     </span>
                   </td>
                   <td style={{ padding: "0.875rem 1rem" }}>
-                    <span style={{ fontSize: "0.8rem", color: item.isPremium ? "#C9A84C" : "#888880" }}>
-                      {item.isPremium ? "Yes" : "No"}
-                    </span>
-                  </td>
-                  <td style={{ padding: "0.875rem 1rem" }}>
-                    <span style={{ fontSize: "0.8rem", color: item.isPublished ? "#27AE60" : "#C0392B" }}>
-                      {item.isPublished ? "Live" : "Draft"}
-                    </span>
-                  </td>
-                  <td style={{ padding: "0.875rem 1rem" }}>
-                    {item.externalUrl && (
-                      
-                       <a href={item.externalUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-xs"
-                        style={{ color: "#C9A84C" }}
-                      >
-                        <ExternalLink size={12} /> Open
-                      </a>
-                    )}
+                    <Link
+                      href={`/admin/media/${item.id}/edit`}
+                      style={{
+                        display:    "flex",
+                        alignItems: "center",
+                        gap:        "4px",
+                        fontSize:   "0.75rem",
+                        color:      "#C9A84C",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <Pencil size={12} /> Edit
+                    </Link>
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
     </div>
