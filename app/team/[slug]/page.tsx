@@ -1,47 +1,44 @@
-// ============================================================
-// FM2 EMPIRE — TEAM PROFILE PAGE (route: /team/[slug])
-// One page generated per team member. generateStaticParams
-// pre-builds a page for every person in lib/data.ts.
-// ============================================================
-
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { teamMembers } from "@/lib/data";
+import { getTeamMemberBySlug, getActiveTeamMembers } from "@/lib/cms";
 import TeamProfileContent from "@/components/pages/TeamProfileContent";
 
 export async function generateStaticParams() {
-  return teamMembers.map((member) => ({ slug: member.slug }));
+  try {
+    const members = await getActiveTeamMembers();
+    return members.map((m) => ({ slug: m.slug }));
+  } catch {
+    return [];
+  }
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const member = teamMembers.find((m) => m.slug === slug);
+  const member   = await getTeamMemberBySlug(slug);
+  if (!member) return { title: "Team Member Not Found" };
+  return { title: member.name, description: member.bio ?? undefined };
+}
 
-  if (!member) {
-    return { title: "Team Member Not Found" };
-  }
+export default async function TeamProfilePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const member   = await getTeamMemberBySlug(slug);
+  if (!member) notFound();
 
-  return {
-    title: member.name,
-    description: member.bio,
+  // Convert CMSTeamMember to shape TeamProfileContent expects
+  const memberForProfile = {
+    id:       member.id,
+    slug:     member.slug,
+    name:     member.name,
+    role:     member.role,
+    bio:      member.bio ?? "",
+    longBio:  member.long_bio ?? undefined,
+    imageUrl: member.image_url ?? "",
+    socials: {
+      instagram: member.instagram ?? undefined,
+      twitter:   member.twitter   ?? undefined,
+      linkedin:  member.linkedin  ?? undefined,
+    },
   };
-}
 
-export default async function TeamProfilePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const member = teamMembers.find((m) => m.slug === slug);
-
-  if (!member) {
-    notFound();
-  }
-
-  return <TeamProfileContent member={member} />;
+  return <TeamProfileContent member={memberForProfile} />;
 }
