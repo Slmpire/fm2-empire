@@ -24,6 +24,7 @@ const navItems = [
   { label: "Events",       href: "/admin/events",       icon: Calendar },
   { label: "Media",        href: "/admin/media",        icon: Film },
   { label: "Team",         href: "/admin/team",         icon: Users },
+  { label: "News",         href: "/admin/news",         icon: FileText },
   { label: "Settings",     href: "/admin/settings",     icon: Settings },
 ];
 
