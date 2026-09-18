@@ -7,15 +7,16 @@ import { getActiveTeamMembers } from "@/lib/cms";
 import { getInitials } from "@/lib/utils";
 import SectionLabel from "@/components/ui/SectionLabel";
 import AnimatedText from "@/components/ui/AnimatedText";
+import type { CMSTeamMember } from "@/lib/cms";
 
 export default async function Team() {
-  let members = [];
+
+  let members: CMSTeamMember[] = [];
   try {
     members = await getActiveTeamMembers();
   } catch {
     members = [];
   }
-
   return (
     <section id="team" className="relative" style={{ backgroundColor: "var(--color-fm2-dark)" }}>
       <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--color-fm2-border), transparent)" }} />
