@@ -4,6 +4,7 @@ import { getPublishedPosts } from "@/lib/cms";
 import { formatDate } from "@/lib/utils";
 import SectionLabel from "@/components/ui/SectionLabel";
 import AnimatedText from "@/components/ui/AnimatedText";
+import type { CMSPost } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "News",
@@ -20,7 +21,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export default async function NewsPage() {
-  let posts = [];
+  let posts: CMSPost[] = [];
   try {
     posts = await getPublishedPosts();
   } catch {
