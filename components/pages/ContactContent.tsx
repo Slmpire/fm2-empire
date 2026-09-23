@@ -9,12 +9,13 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Camera, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, Camera, Send, CheckCircle2 , Calendar } from "lucide-react";
 import AnimatedText from "@/components/ui/AnimatedText";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import { supabase } from "@/lib/supabase";
 import { isValidEmail } from "@/lib/utils";
+
 
 export default function ContactContent() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -139,7 +140,30 @@ export default function ContactContent() {
             </div>
 
             {/* Form column */}
-            <div className="lg:col-span-3">
+                  {/* Form column */}
+      <div className="lg:col-span-3 flex flex-col gap-5">
+
+        {/* Book a call CTA */}
+        
+          <a href="/book"
+          className="card-surface flex items-center gap-4 hover:border-[#C9A84C]/40 transition-colors duration-300"
+          style={{ textDecoration: "none" }}
+        >
+          <div
+            className="w-11 h-11 rounded-lg flex items-center justify-center shrink-0"
+            style={{ backgroundColor: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)" }}
+          >
+            <Calendar size={18} style={{ color: "var(--color-fm2-gold)" }} />
+          </div>
+          <div className="flex flex-col gap-0.5">
+            <span className="text-sm font-semibold" style={{ color: "var(--color-fm2-white)" }}>
+              Prefer a call?
+            </span>
+            <span className="text-xs" style={{ color: "var(--color-fm2-gold)" }}>
+              Book a 30 or 60-minute session with our team →
+            </span>
+          </div>
+        </a>
               {isSubmitted ? (
                 <motion.div
                   initial={{ opacity: 0, y: 12 }}
