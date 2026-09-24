@@ -172,6 +172,11 @@ export default function ApplicationsTable({ applications, initialType = "all" }:
       </p>
 
       {/* Table */}
+      <div
+        className="rounded-xl border overflow-hidden"
+        style={{ borderColor: "#2A2A2A" , overflowX: "auto" }}
+      >
+        <div style={{ minWidth: "640px" }}></div>
         {filtered.length === 0 ? (
           <p className="text-sm text-center py-12" style={{ color: "#888880" }}>
             No submissions match your filters.
