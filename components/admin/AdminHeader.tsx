@@ -33,7 +33,7 @@ export default function AdminHeader() {
 
   return (
     <header
-      className="flex items-center justify-between px-6 h-16 border-b shrink-0"
+            className="flex items-center justify-between pl-16 pr-6 md:pl-6 h-16 border-b shrink-0"
       style={{
         backgroundColor: "#111111",
         borderColor: "#2A2A2A",
