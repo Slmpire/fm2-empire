@@ -1,21 +1,16 @@
 // ============================================================
 // FM2 EMPIRE — ADMIN SIDEBAR
-// Left navigation for the entire admin panel.
-// Active route is highlighted automatically.
+// Desktop: fixed left sidebar.
+// Mobile: hidden by default, opens as a slide-in drawer
+// triggered by the hamburger button in AdminHeader.
 // ============================================================
 
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  FileText,
-  Calendar,
-  Film,
-  Users,
-  Settings,
-} from "lucide-react";
+import { Menu, X, LayoutDashboard, FileText, Calendar, Film, Users, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -29,57 +24,55 @@ const navItems = [
 ];
 
 export default function AdminSidebar() {
-  const pathname = usePathname();
+  const pathname          = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <aside
-      className="hidden md:flex flex-col w-60 shrink-0 border-r"
-      style={{
-        backgroundColor: "#111111",
-        borderColor: "#2A2A2A",
-        minHeight: "100vh",
-      }}
-    >
+  // Close drawer on route change
+  useEffect(() => { setIsOpen(false); }, [pathname]);
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
+  const isActive = (href: string) =>
+    pathname === href ||
+    (href !== "/admin/dashboard" && pathname.startsWith(href));
+
+  const NavContent = () => (
+    <>
       {/* Logo */}
-      <div
-        className="flex items-center px-6 h-16 border-b shrink-0"
-        style={{ borderColor: "#2A2A2A" }}
-      >
-        <Link href="/" className="flex items-center gap-2">
-          <span
-            className="font-bold text-lg tracking-tight"
-            style={{ fontFamily: "Georgia, serif", color: "#F5F5F0" }}
-          >
-            FM2
-            <span style={{ color: "#C9A84C" }}> Admin</span>
+      <div style={{ padding: "0 1.5rem", height: "4rem", display: "flex", alignItems: "center", borderBottom: "1px solid #2A2A2A", flexShrink: 0 }}>
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <span style={{ fontWeight: 700, fontSize: "1.125rem", fontFamily: "Georgia, serif", color: "#F5F5F0" }}>
+            FM2 <span style={{ color: "#C9A84C" }}>Admin</span>
           </span>
         </Link>
       </div>
 
-      {/* Nav */}
-      <nav className="flex flex-col gap-1 px-3 py-4 flex-1">
+      {/* Nav items */}
+      <nav style={{ display: "flex", flexDirection: "column", gap: "4px", padding: "1rem 0.75rem", flex: 1 }}>
         {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href !== "/admin/dashboard" &&
-              pathname.startsWith(item.href));
-
+          const Icon   = item.icon;
+          const active = isActive(item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150"
-              )}
               style={{
-                backgroundColor: isActive
-                  ? "rgba(201,168,76,0.1)"
-                  : "transparent",
-                color: isActive ? "#C9A84C" : "#888880",
-                border: isActive
-                  ? "1px solid rgba(201,168,76,0.2)"
-                  : "1px solid transparent",
+                display:         "flex",
+                alignItems:      "center",
+                gap:             "0.75rem",
+                padding:         "0.625rem 0.75rem",
+                borderRadius:    "8px",
+                fontSize:        "0.875rem",
+                fontWeight:      500,
+                textDecoration:  "none",
+                transition:      "all 150ms",
+                backgroundColor: active ? "rgba(201,168,76,0.1)" : "transparent",
+                color:           active ? "#C9A84C" : "#888880",
+                border:          active ? "1px solid rgba(201,168,76,0.2)" : "1px solid transparent",
               }}
             >
               <Icon size={16} strokeWidth={1.75} />
@@ -89,20 +82,104 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      {/* Bottom — link to public site */}
-      <div
-        className="px-3 py-4 border-t"
-        style={{ borderColor: "#2A2A2A" }}
-      >
+      {/* View public site */}
+      <div style={{ padding: "1rem 0.75rem", borderTop: "1px solid #2A2A2A" }}>
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs transition-colors duration-150"
-          style={{ color: "#888880" }}
+          style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.5rem 0.75rem", fontSize: "0.75rem", color: "#888880", textDecoration: "none" }}
         >
           ↗ View Public Site
         </Link>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside
+        className="hidden md:flex flex-col"
+        style={{ width: "240px", minHeight: "100vh", backgroundColor: "#111111", borderRight: "1px solid #2A2A2A", flexShrink: 0 }}
+      >
+        <NavContent />
+      </aside>
+
+      {/* Mobile hamburger button */}
+      <button
+        className="md:hidden"
+        onClick={() => setIsOpen(true)}
+        style={{
+          position:        "fixed",
+          top:             "1rem",
+          left:            "1rem",
+          zIndex:          200,
+          width:           "2.5rem",
+          height:          "2.5rem",
+          backgroundColor: "#1A1A1A",
+          border:          "1px solid #2A2A2A",
+          borderRadius:    "8px",
+          display:         "flex",
+          alignItems:      "center",
+          justifyContent:  "center",
+          cursor:          "pointer",
+          color:           "#F5F5F0",
+        }}
+        aria-label="Open admin menu"
+      >
+        <Menu size={18} />
+      </button>
+
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="md:hidden"
+          onClick={() => setIsOpen(false)}
+          style={{
+            position:        "fixed",
+            inset:           0,
+            backgroundColor: "rgba(8,8,8,0.7)",
+            zIndex:          150,
+          }}
+        />
+      )}
+
+      {/* Mobile drawer */}
+      <aside
+        className="md:hidden"
+        style={{
+          position:        "fixed",
+          top:             0,
+          left:            0,
+          bottom:          0,
+          width:           "280px",
+          backgroundColor: "#111111",
+          borderRight:     "1px solid #2A2A2A",
+          zIndex:          200,
+          display:         "flex",
+          flexDirection:   "column",
+          transform:       isOpen ? "translateX(0)" : "translateX(-100%)",
+          transition:      "transform 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={() => setIsOpen(false)}
+          style={{
+            position:        "absolute",
+            top:             "1rem",
+            right:           "1rem",
+            background:      "none",
+            border:          "none",
+            cursor:          "pointer",
+            color:           "#888880",
+            display:         "flex",
+          }}
+        >
+          <X size={18} />
+        </button>
+        <NavContent />
+      </aside>
+    </>
   );
 }
