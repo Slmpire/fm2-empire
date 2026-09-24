@@ -31,6 +31,7 @@ const footerLinks = [
       { label: "Our Team", href: "/about#team" },
       { label: "Careers", href: "/#apply" },
       { label: "Contact", href: "/contact" },
+      { label: "Book a Call",  href: "/book" },
     ],
   },
   {
