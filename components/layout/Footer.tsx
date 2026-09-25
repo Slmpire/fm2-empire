@@ -50,6 +50,7 @@ const footerLinks = [
       { label: "Events", href: "/#events" },
       { label: "Buy Tickets", href: "/#events" },
       { label: "Apply / Enroll", href: "/#apply" },
+      { label: "Check App. Status", href: "/status" },
     ],
   },
 ];
