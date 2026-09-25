@@ -71,6 +71,16 @@ export default function FormSuccess({
               {secondaryAction.label}
             </Button>
           )}
+                {/* Status portal link */}
+      <p className="text-xs mt-2" style={{ color: "var(--color-fm2-muted)" }}>
+        You can check your application status anytime at{" "}
+        
+         <a  href="/status"
+          style={{ color: "var(--color-fm2-gold)", textDecoration: "none" }}
+        >
+          fm2empire.com/status
+        </a>
+      </p>
         </div>
       )}
     </motion.div>
