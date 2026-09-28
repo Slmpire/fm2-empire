@@ -84,10 +84,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
+        <html
       lang="en"
       className={`${inter.variable} ${playfair.variable}`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <body className={inter.className}>
         <ConditionalLayout>{children}</ConditionalLayout>
