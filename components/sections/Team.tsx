@@ -10,10 +10,11 @@ import AnimatedText from "@/components/ui/AnimatedText";
 import type { CMSTeamMember } from "@/lib/cms";
 
 export default async function Team() {
-
   let members: CMSTeamMember[] = [];
   try {
-    members = await getActiveTeamMembers();
+    [members] = await Promise.all([
+      getActiveTeamMembers(),
+    ]);
   } catch {
     members = [];
   }
