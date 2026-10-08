@@ -54,11 +54,22 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Check role permission
+    const { getAdminSession } = await import("@/lib/session");
+    const { hasPermission }   = await import("@/lib/rbac");
+    const adminSession        = await getAdminSession();
+
+    if (!adminSession || !hasPermission(adminSession.role, "update_application_status")) {
+      return NextResponse.json(
+        { error: "Your role does not have permission to update application status." },
+        { status: 403 }
+      );
+    }
     const { id, status } = await request.json();
 
     if (!id || !status) {
