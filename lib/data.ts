@@ -21,12 +21,12 @@ export const teamMembers: TeamMember[] = [
   {
     id: "1",
     slug: "founder-name",
-    name: "Founder Name",
+    name: "Tosin Isaac Ajayi",
     role: "Founder & Creative Director",
     bio: "Leads the overall creative vision and direction of FM2 Empire across all productions and talent initiatives.",
     longBio:
       "With a background spanning music production, brand strategy, and live events, [Founder Name] built FM2 Empire to close the gap between raw creative talent and the industry infrastructure needed to sustain a career. Their approach blends artistic instinct with operational discipline — every FM2 production reflects that balance.",
-    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+    imageUrl: "https://res.cloudinary.com/slmedia/image/upload/v1791981837/Tosin_Isaac_Ajayi__ucw3f4.webp",
     socials: { instagram: "https://instagram.com" },
   },
   {
