@@ -24,29 +24,29 @@ const testimonials: Testimonial[] = [
   {
     id: "1",
     quote:
-      "FM2 didn't just produce my single — they built a strategy around it. The difference showed in every stream and every show afterward.",
-    name: "Amara Chukwu",
-    role: "Recording Artist",
+      "Yeah so far so good, I have worked with Fm2empire for more than  4years now on different projects and they have been so awesome. Their professionalism, their taste for high quality creativity and consistency has been awesome. I look forward to working with you guys more in years to come",
+    name: "Jimmy Ex",
+    role: "Creative",
     imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop",
+      "https://res.cloudinary.com/fi0iuzdw/image/upload/v1794597088/file_000000000570820ea84b3a9edd8c04fe.png",
   },
   {
     id: "2",
     quote:
-      "We needed a team that understood both creative vision and execution under pressure. FM2 delivered our event flawlessly, start to finish.",
-    name: "Tunde Bakare",
+      "They’ve handled most of my visuals over the past three years, so I’ve had a front-row seat to their work ethic, creativity, and commitment to the craft.If you need people who care about the work as much as you do, people who will push, improvise, and find a way to bring your vision to life, I can recommend FM2 Empire without a second thought.",
+    name: "MO'BELIEVE",
     role: "Event Partner, Lagos Creative Week",
     imageUrl:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+      "https://res.cloudinary.com/fi0iuzdw/image/upload/v1794597084/IMG-20261111-WA0088.jpg",
   },
   {
     id: "3",
     quote:
-      "The internship program gave me real studio hours, not busywork. Three months in and I was already credited on a production.",
-    name: "Ngozi Eze",
-    role: "Former FM2 Intern, now Production Assistant",
+      "The internship gave me real studio hours, not busywork. Three weeks in and I was already in love with their services.",
+    name: "Etienne Steve",
+    role: "Media Lead at MegaWatt",
     imageUrl:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+      "https://res.cloudinary.com/fi0iuzdw/image/upload/v1794605146/IMG-20261111-WA0014.jpg",
   },
 ];
 
