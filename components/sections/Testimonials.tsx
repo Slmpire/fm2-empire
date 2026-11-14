@@ -42,7 +42,7 @@ const testimonials: Testimonial[] = [
   {
     id: "3",
     quote:
-      "The internship gave me real studio hours, not busywork. Three weeks in and I was already in love with their services.",
+      "The internship gave me real studio hours, not busywork. Three weeks in and I was already in love with their services. They are just the best. I would recommend them to anyone looking for a creative agency that is not only professional but also fun to work with.",
     name: "Etienne Steve",
     role: "Media Lead at MegaWatt",
     imageUrl:
