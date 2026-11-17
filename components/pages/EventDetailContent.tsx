@@ -15,7 +15,12 @@ import { formatDate, isValidEmail, isValidNigerianPhone } from "@/lib/utils";
 import { allEvents } from "@/lib/data";
 import type { Event } from "@/types/index";
 
-export default function EventDetailContent({ event }: { event: Event }) {
+type Props = {
+  event: Event;
+  otherEventsProp?: Event[];
+};
+
+export default function EventDetailContent({ event, otherEventsProp }: Props) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [isLoading,    setIsLoading]    = useState(false);
   const [error,        setError]        = useState("");
@@ -27,9 +32,9 @@ export default function EventDetailContent({ event }: { event: Event }) {
     quantity: 1,
   });
 
-  const otherEvents = allEvents
-    .filter((e) => e.slug !== event.slug)
-    .slice(0, 3);
+  const otherEvents = otherEventsProp && otherEventsProp.length > 0
+    ? otherEventsProp
+    : allEvents.filter((e) => e.slug !== event.slug).slice(0, 3);
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -248,19 +253,19 @@ export default function EventDetailContent({ event }: { event: Event }) {
                 <Link
                   key={other.id}
                   href={`/events/${other.slug}`}
-                  className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 !p-0"
+                  className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 !p-0 flex flex-col h-full"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden shrink-0">
                     <div
                       className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
                       style={{ backgroundImage: `url(${other.imageUrl})` }}
                     />
                   </div>
-                  <div className="p-5 flex flex-col gap-2">
+                  <div className="p-5 flex flex-col flex-1 gap-2">
                     <span className="text-xs font-medium" style={{ color: "var(--color-fm2-gold)" }}>
                       {formatDate(other.date)}
                     </span>
-                    <h3 className="font-display font-bold text-base leading-snug" style={{ color: "var(--color-fm2-white)" }}>
+                    <h3 className="font-display font-bold text-base leading-snug line-clamp-2" style={{ color: "var(--color-fm2-white)" }}>
                       {other.title}
                     </h3>
                   </div>

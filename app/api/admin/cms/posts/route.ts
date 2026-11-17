@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { adminSavePost, adminDeletePost } from "@/lib/cms";
 
 async function getSession() {
@@ -23,6 +24,12 @@ export async function POST(request: NextRequest) {
     const { id, ...data } = body;
     const cleaned = Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v === "" ? null : v]));
     const item    = await adminSavePost(cleaned, id);
+
+    revalidatePath("/", "layout");
+    revalidatePath("/");
+    revalidatePath("/news");
+    revalidatePath("/admin/news");
+
     return NextResponse.json({ success: true, item });
   } catch (error) {
     console.error("CMS post save error:", error);
@@ -39,6 +46,12 @@ export async function DELETE(request: NextRequest) {
     if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
 
     await adminDeletePost(id);
+
+    revalidatePath("/", "layout");
+    revalidatePath("/");
+    revalidatePath("/news");
+    revalidatePath("/admin/news");
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("CMS post delete error:", error);

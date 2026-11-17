@@ -165,7 +165,7 @@ export default function Services() {
 
         {/* ---- SERVICES GRID ---- */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start "
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -178,7 +178,7 @@ export default function Services() {
                 key={service.id}
                 variants={cardVariants}
                 className={cn(
-                  "card-surface flex flex-col items-center text-center gap-4",
+                  "card-surface flex flex-col items-center text-center gap-4 h-full",
                   "transition-all duration-300 hover:-translate-y-1",
                   "hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]",
                   service.isFeatured
@@ -200,7 +200,7 @@ export default function Services() {
 
                 {/* Title — centered */}
                 <h3
-                  className="font-display font-bold text-xl leading-tight"
+                  className="font-display font-bold text-xl leading-tight line-clamp-1"
                   style={{ color: "var(--color-fm2-white)" }}
                 >
                   {service.title}
@@ -208,7 +208,7 @@ export default function Services() {
 
                 {/* Description — centered, max width keeps lines balanced */}
                 <p
-                  className="text-sm leading-relaxed max-w-[30ch]"
+                  className="text-sm leading-relaxed max-w-[32ch] line-clamp-4"
                   style={{ color: "var(--color-fm2-muted)" }}
                 >
                   {service.description}
@@ -216,7 +216,7 @@ export default function Services() {
 
                 {/* Audience tag — centered, full width border */}
                 <div
-                  className="w-full text-xs font-medium tracking-wide pt-3 pb-1 border-t mt-1"
+                  className="w-full text-xs font-medium tracking-wide pt-3 pb-1 border-t mt-auto"
                   style={{
                     color: "var(--color-fm2-muted)",
                     borderColor: "var(--color-fm2-border)",

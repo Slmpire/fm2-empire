@@ -283,15 +283,24 @@ export default function CMSEventForm({ item, isNew = false }: Props) {
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-        <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
-          <input type="checkbox" checked={form.is_featured} onChange={(e) => set("is_featured", e.target.checked)} style={{ width: "1rem", height: "1rem", accentColor: "#C9A84C" }} />
-          <span style={{ fontSize: "0.875rem", color: "#F5F5F0" }}>Featured Event</span>
-        </label>
-        <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
-          <input type="checkbox" checked={form.is_third_party} onChange={(e) => set("is_third_party", e.target.checked)} style={{ width: "1rem", height: "1rem", accentColor: "#C9A84C" }} />
-          <span style={{ fontSize: "0.875rem", color: "#F5F5F0" }}>Partner / Third-Party Event</span>
-        </label>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+          <div>
+            <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+              <input type="checkbox" checked={form.is_featured} onChange={(e) => set("is_featured", e.target.checked)} style={{ width: "1rem", height: "1rem", accentColor: "#C9A84C" }} />
+              <span style={{ fontSize: "0.875rem", color: "#F5F5F0", fontWeight: 600 }}>Featured Event</span>
+            </label>
+            <span style={{ ...helperStyle, marginLeft: "1.5rem" }}>
+              Highlights this event in the hero spot on the homepage. Any other featured event will be automatically unfeatured.
+            </span>
+          </div>
+          <div>
+            <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+              <input type="checkbox" checked={form.is_third_party} onChange={(e) => set("is_third_party", e.target.checked)} style={{ width: "1rem", height: "1rem", accentColor: "#C9A84C" }} />
+              <span style={{ fontSize: "0.875rem", color: "#F5F5F0" }}>Partner / Third-Party Event</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       {/* Lineup */}

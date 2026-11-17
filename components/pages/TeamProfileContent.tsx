@@ -10,11 +10,19 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Globe } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { teamMembers } from "@/lib/data";
+import { teamMembers as fallbackTeamMembers } from "@/lib/data";
+import { getInitials } from "@/lib/utils";
 import type { TeamMember } from "@/types/index";
+import type { CMSTeamMember } from "@/lib/cms";
 
-export default function TeamProfileContent({ member }: { member: TeamMember }) {
-  const otherMembers = teamMembers.filter((m) => m.slug !== member.slug);
+type Props = {
+  member: TeamMember;
+  allMembers?: CMSTeamMember[];
+};
+
+export default function TeamProfileContent({ member, allMembers }: Props) {
+  const sourceMembers = allMembers && allMembers.length > 0 ? allMembers : fallbackTeamMembers;
+  const otherMembers = sourceMembers.filter((m) => m.slug !== member.slug);
 
   return (
     <>
@@ -155,30 +163,46 @@ export default function TeamProfileContent({ member }: { member: TeamMember }) {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {otherMembers.map((other) => (
-              <Link
-                key={other.id}
-                href={`/team/${other.slug}`}
-                className="card-surface flex items-center gap-4 group hover:border-[#C9A84C]/40 transition-colors duration-300"
-              >
-                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0" style={{ border: "1px solid var(--color-fm2-border)" }}>
-                  <img src={other.imageUrl} alt={other.name} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex flex-col gap-0.5 flex-1">
-                  <span className="font-display font-bold text-sm" style={{ color: "var(--color-fm2-white)" }}>
-                    {other.name}
-                  </span>
-                  <span className="text-xs" style={{ color: "var(--color-fm2-gold)" }}>
-                    {other.role}
-                  </span>
-                </div>
-                <ArrowRight
-                  size={15}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0"
-                  style={{ color: "var(--color-fm2-gold)" }}
-                />
-              </Link>
-            ))}
+            {otherMembers.map((other) => {
+              const imageUrl = "image_url" in other ? other.image_url : other.imageUrl;
+
+              return (
+                <Link
+                  key={other.id}
+                  href={`/team/${other.slug}`}
+                  className="card-surface flex items-center gap-4 group hover:border-[#C9A84C]/40 transition-colors duration-300 h-full p-4"
+                >
+                  <div
+                    className="w-14 h-14 rounded-full overflow-hidden shrink-0 flex items-center justify-center"
+                    style={{
+                      border: "1px solid var(--color-fm2-border)",
+                      backgroundColor: "rgba(201,168,76,0.08)",
+                    }}
+                  >
+                    {imageUrl ? (
+                      <img src={imageUrl} alt={other.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="font-display font-bold text-sm" style={{ color: "var(--color-fm2-gold)" }}>
+                        {getInitials(other.name)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                    <span className="font-display font-bold text-sm truncate" style={{ color: "var(--color-fm2-white)" }}>
+                      {other.name}
+                    </span>
+                    <span className="text-xs truncate" style={{ color: "var(--color-fm2-gold)" }}>
+                      {other.role}
+                    </span>
+                  </div>
+                  <ArrowRight
+                    size={15}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0"
+                    style={{ color: "var(--color-fm2-gold)" }}
+                  />
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

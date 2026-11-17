@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { adminSaveMedia, adminDeleteMedia } from "@/lib/cms";
 
 async function getSession() {
@@ -42,6 +43,12 @@ export async function POST(request: NextRequest) {
     );
 
     const item = await adminSaveMedia(cleaned, id);
+
+    revalidatePath("/", "layout");
+    revalidatePath("/");
+    revalidatePath("/media");
+    revalidatePath("/admin/media");
+
     return NextResponse.json({ success: true, item });
   } catch (error) {
     console.error("CMS media save error:", error);
@@ -65,6 +72,12 @@ export async function DELETE(request: NextRequest) {
     }
 
     await adminDeleteMedia(id);
+
+    revalidatePath("/", "layout");
+    revalidatePath("/");
+    revalidatePath("/media");
+    revalidatePath("/admin/media");
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("CMS media delete error:", error);

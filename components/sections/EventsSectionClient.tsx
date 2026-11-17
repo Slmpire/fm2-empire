@@ -75,9 +75,9 @@ export default function EventsSectionClient({ featured, upcoming }: Props) {
         {upcoming.length > 0 && (
           <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-5" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>
             {upcoming.map((event) => (
-              <motion.div key={event.id} variants={cardVariants}>
-                <Link href={`/events/${event.slug}`} className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 block !p-0">
-                  <div className="relative aspect-[4/3] overflow-hidden">
+              <motion.div key={event.id} variants={cardVariants} className="h-full">
+                <Link href={`/events/${event.slug}`} className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 flex flex-col h-full !p-0">
+                  <div className="relative aspect-[4/3] overflow-hidden shrink-0">
                     {event.image_url ? (
                       <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${event.image_url})` }} />
                     ) : (
@@ -87,11 +87,12 @@ export default function EventsSectionClient({ featured, upcoming }: Props) {
                       <span className="absolute top-3 left-3 text-xs font-medium px-2.5 py-1 rounded-full z-10" style={{ backgroundColor: "rgba(8,8,8,0.8)", color: "var(--color-fm2-muted)" }}>Partner Event</span>
                     )}
                   </div>
-                  <div className="p-5 flex flex-col gap-3">
+                  <div className="p-5 flex flex-col flex-1 gap-3">
                     <span className="flex items-center gap-2 text-xs font-medium" style={{ color: "var(--color-fm2-gold)" }}><Calendar size={13} />{formatDate(event.date)}</span>
-                    <h3 className="font-display font-bold text-lg leading-snug" style={{ color: "var(--color-fm2-white)" }}>{event.title}</h3>
-                    {event.venue && <span className="flex items-center gap-2 text-xs" style={{ color: "var(--color-fm2-muted)" }}><MapPin size={13} />{event.venue}, {event.city}</span>}
-                    <div className="flex items-center justify-between pt-3 mt-1 border-t" style={{ borderColor: "var(--color-fm2-border)" }}>
+                    <h3 className="font-display font-bold text-lg leading-snug line-clamp-2" style={{ color: "var(--color-fm2-white)" }}>{event.title}</h3>
+                    {event.description && <p className="text-sm leading-relaxed line-clamp-2" style={{ color: "var(--color-fm2-muted)" }}>{event.description}</p>}
+                    {event.venue && <span className="flex items-center gap-2 text-xs truncate" style={{ color: "var(--color-fm2-muted)" }}><MapPin size={13} />{event.venue}, {event.city}</span>}
+                    <div className="flex items-center justify-between pt-3 mt-auto border-t" style={{ borderColor: "var(--color-fm2-border)" }}>
                       <span className="text-sm font-semibold" style={{ color: "var(--color-fm2-white)" }}>{event.ticket_price === 0 ? "Free Entry" : `₦${event.ticket_price.toLocaleString()}`}</span>
                       <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "var(--color-fm2-gold)" }}>Details <ArrowRight size={12} /></span>
                     </div>

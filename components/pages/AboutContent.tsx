@@ -13,7 +13,8 @@ import AnimatedText from "@/components/ui/AnimatedText";
 import SectionLabel from "@/components/ui/SectionLabel";
 import Button from "@/components/ui/Button";
 import { getInitials } from "@/lib/utils";
-import { teamMembers } from "@/lib/data";
+import { teamMembers as fallbackTeamMembers } from "@/lib/data";
+import type { CMSTeamMember } from "@/lib/cms";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?q=80&w=2400&auto=format&fit=crop";
@@ -62,7 +63,9 @@ const containerVariants: Variants = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-export default function AboutContent() {
+export default function AboutContent({ members }: { members?: CMSTeamMember[] }) {
+  const displayMembers = members && members.length > 0 ? members : fallbackTeamMembers;
+
   return (
     <>
       {/* ---- PAGE HERO ---- */}
@@ -130,17 +133,17 @@ export default function AboutContent() {
               {values.map((value) => {
                 const Icon = value.icon;
                 return (
-                  <motion.div key={value.title} variants={fadeVariants} className="card-surface flex flex-col gap-3">
+                  <motion.div key={value.title} variants={fadeVariants} className="card-surface flex flex-col gap-3 h-full">
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center"
+                      className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
                       style={{ backgroundColor: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)" }}
                     >
                       <Icon size={17} style={{ color: "var(--color-fm2-gold)" }} />
                     </div>
-                    <h3 className="font-display font-bold text-base" style={{ color: "var(--color-fm2-white)" }}>
+                    <h3 className="font-display font-bold text-base line-clamp-1" style={{ color: "var(--color-fm2-white)" }}>
                       {value.title}
                     </h3>
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-fm2-muted)" }}>
+                    <p className="text-sm leading-relaxed mt-auto line-clamp-4" style={{ color: "var(--color-fm2-muted)" }}>
                       {value.description}
                     </p>
                   </motion.div>
@@ -169,14 +172,14 @@ export default function AboutContent() {
             viewport={{ once: true, margin: "-80px" }}
           >
             {milestones.map((milestone) => (
-              <motion.div key={milestone.title} variants={fadeVariants} className="card-surface flex flex-col gap-2">
+              <motion.div key={milestone.title} variants={fadeVariants} className="card-surface flex flex-col gap-2 h-full">
                 <span className="font-display font-bold text-sm" style={{ color: "var(--color-fm2-gold)" }}>
                   {milestone.year}
                 </span>
-                <h3 className="font-display font-bold text-lg" style={{ color: "var(--color-fm2-white)" }}>
+                <h3 className="font-display font-bold text-lg line-clamp-1" style={{ color: "var(--color-fm2-white)" }}>
                   {milestone.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--color-fm2-muted)" }}>
+                <p className="text-sm leading-relaxed mt-auto line-clamp-3" style={{ color: "var(--color-fm2-muted)" }}>
                   {milestone.description}
                 </p>
               </motion.div>
@@ -202,37 +205,55 @@ export default function AboutContent() {
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
           >
-            {teamMembers.map((member) => (
-              <motion.div key={member.id} variants={fadeVariants}>
-                <Link
-                  href={`/team/${member.slug}`}
-                  className="card-surface flex flex-col items-center text-center gap-4 group hover:border-[#C9A84C]/40 transition-colors duration-300 block"
-                >
-                  <div
-                    className="w-20 h-20 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: "rgba(201,168,76,0.08)", border: "2px solid rgba(201,168,76,0.25)" }}
+            {displayMembers.map((member) => {
+              const imageUrl = "image_url" in member ? member.image_url : member.imageUrl;
+              const bio = "bio" in member ? member.bio : null;
+
+              return (
+                <motion.div key={member.id} variants={fadeVariants} className="h-full">
+                  <Link
+                    href={`/team/${member.slug}`}
+                    className="card-surface flex flex-col items-center text-center gap-4 group hover:border-[#C9A84C]/40 transition-colors duration-300 h-full p-6"
                   >
-                    <span className="font-display font-bold text-2xl" style={{ color: "var(--color-fm2-gold)" }}>
-                      {getInitials(member.name)}
+                    <div
+                      className="w-20 h-20 rounded-full flex items-center justify-center shrink-0 overflow-hidden"
+                      style={{ backgroundColor: "rgba(201,168,76,0.08)", border: "2px solid rgba(201,168,76,0.25)" }}
+                    >
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt={member.name}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <span className="font-display font-bold text-2xl" style={{ color: "var(--color-fm2-gold)" }}>
+                          {getInitials(member.name)}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-1 w-full">
+                      <h3 className="font-display font-bold text-base line-clamp-1" style={{ color: "var(--color-fm2-white)" }}>
+                        {member.name}
+                      </h3>
+                      <span className="text-xs font-medium uppercase tracking-wide line-clamp-1" style={{ color: "var(--color-fm2-gold)" }}>
+                        {member.role}
+                      </span>
+                    </div>
+                    {bio && (
+                      <p className="text-xs leading-relaxed line-clamp-3" style={{ color: "var(--color-fm2-muted)" }}>
+                        {bio}
+                      </p>
+                    )}
+                    <span
+                      className="text-xs font-semibold flex items-center gap-1 mt-auto pt-2 opacity-80 group-hover:opacity-100 transition-opacity duration-200"
+                      style={{ color: "var(--color-fm2-gold)" }}
+                    >
+                      View Profile <ArrowRight size={12} />
                     </span>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h3 className="font-display font-bold text-base" style={{ color: "var(--color-fm2-white)" }}>
-                      {member.name}
-                    </h3>
-                    <span className="text-xs" style={{ color: "var(--color-fm2-gold)" }}>
-                      {member.role}
-                    </span>
-                  </div>
-                  <span
-                    className="text-xs font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ color: "var(--color-fm2-gold)" }}
-                  >
-                    View Profile <ArrowRight size={12} />
-                  </span>
-                </Link>
-              </motion.div>
-            ))}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>

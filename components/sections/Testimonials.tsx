@@ -118,7 +118,7 @@ export default function Testimonials() {
 
         {/* ---- TESTIMONIAL CARDS ---- */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start"
+          className="grid grid-cols-1 md:grid-cols-3 gap-5"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -128,52 +128,56 @@ export default function Testimonials() {
             <motion.div
               key={testimonial.id}
               variants={cardVariants}
-              className="card-surface flex flex-col items-center text-center gap-5 hover:border-[#C9A84C]/30 transition-colors duration-300"
+              className="h-full"
             >
-              {/* Quote icon */}
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                style={{
-                  backgroundColor: "rgba(201, 168, 76, 0.08)",
-                  border: "1px solid rgba(201, 168, 76, 0.2)",
-                }}
+                className="card-surface flex flex-col items-center text-center gap-5 hover:border-[#C9A84C]/30 transition-colors duration-300 h-full"
               >
-                <Quote size={16} style={{ color: "var(--color-fm2-gold)" }} />
-              </div>
-
-              {/* Quote text */}
-              <p
-                className="font-display italic text-base leading-relaxed"
-                style={{ color: "var(--color-fm2-white)", opacity: 0.9 }}
-              >
-                &ldquo;{testimonial.quote}&rdquo;
-              </p>
-
-              {/* Avatar + name + role */}
-              <div className="flex flex-col items-center gap-3 pt-2 mt-auto">
+                {/* Quote icon */}
                 <div
-                  className="w-12 h-12 rounded-full overflow-hidden shrink-0"
-                  style={{ border: "2px solid rgba(201, 168, 76, 0.3)" }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                  style={{
+                    backgroundColor: "rgba(201, 168, 76, 0.08)",
+                    border: "1px solid rgba(201, 168, 76, 0.2)",
+                  }}
                 >
-                  <img
-                    src={testimonial.imageUrl}
-                    alt={testimonial.name}
-                    className="w-full h-full object-cover"
-                  />
+                  <Quote size={16} style={{ color: "var(--color-fm2-gold)" }} />
                 </div>
-                <div className="flex flex-col items-center gap-0.5">
-                  <span
-                    className="font-display font-bold text-sm"
-                    style={{ color: "var(--color-fm2-white)" }}
+
+                {/* Quote text */}
+                <p
+                  className="font-display italic text-base leading-relaxed line-clamp-6"
+                  style={{ color: "var(--color-fm2-white)", opacity: 0.9 }}
+                >
+                  &ldquo;{testimonial.quote}&rdquo;
+                </p>
+
+                {/* Avatar + name + role */}
+                <div className="flex flex-col items-center gap-3 pt-2 mt-auto">
+                  <div
+                    className="w-12 h-12 rounded-full overflow-hidden shrink-0"
+                    style={{ border: "2px solid rgba(201, 168, 76, 0.3)" }}
                   >
-                    {testimonial.name}
-                  </span>
-                  <span
-                    className="text-xs"
-                    style={{ color: "var(--color-fm2-gold)" }}
-                  >
-                    {testimonial.role}
-                  </span>
+                    <img
+                      src={testimonial.imageUrl}
+                      alt={testimonial.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span
+                      className="font-display font-bold text-sm"
+                      style={{ color: "var(--color-fm2-white)" }}
+                    >
+                      {testimonial.name}
+                    </span>
+                    <span
+                      className="text-xs"
+                      style={{ color: "var(--color-fm2-gold)" }}
+                    >
+                      {testimonial.role}
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>

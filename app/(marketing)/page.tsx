@@ -16,6 +16,9 @@ import CTA          from "@/components/sections/CTA";
 import { getPublishedMedia, getPublishedEvents, getActiveTeamMembers } from "@/lib/cms";
 import type { CMSMediaItem, CMSEvent, CMSTeamMember } from "@/lib/cms";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function LandingPage() {
   // All three Supabase calls run at exactly the same time
   const [mediaItems, events, teamMembers] = await Promise.all([
@@ -25,7 +28,7 @@ export default async function LandingPage() {
   ]);
 
   const featured = events.find((e) => e.is_featured) ?? events[0] ?? null;
-  const upcoming = events.filter((e) => !e.is_featured).slice(0, 3);
+  const upcoming = events.filter((e) => e.id !== featured?.id).slice(0, 3);
 
   return (
     <>

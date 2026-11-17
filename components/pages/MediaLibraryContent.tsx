@@ -1,7 +1,8 @@
 // ============================================================
 // FM2 EMPIRE — MEDIA LIBRARY CONTENT
-// Full library, every item from lib/data.ts, real filtering
-// by type plus a text search across title/description.
+// Full library, live Supabase items with fallback to data.ts,
+// real filtering by type plus a text search across title/description.
+// Consistent equal-height cards with clean line-clamping.
 // ============================================================
 
 "use client";
@@ -12,8 +13,24 @@ import { Play, Music, Mic, Film, Image as ImageIcon, Search } from "lucide-react
 import AnimatedText from "@/components/ui/AnimatedText";
 import SectionLabel from "@/components/ui/SectionLabel";
 import { cn } from "@/lib/utils";
-import { mediaItems } from "@/lib/data";
+import { mediaItems as fallbackMediaItems } from "@/lib/data";
+import type { CMSMediaItem } from "@/lib/cms";
 import type { MediaType } from "@/types/index";
+
+type Props = {
+  initialItems?: CMSMediaItem[];
+};
+
+type NormalizedMediaItem = {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  thumbnailUrl: string;
+  externalUrl: string;
+  duration?: string | null;
+  isPremium: boolean;
+};
 
 const filters: { label: string; value: MediaType | "all" }[] = [
   { label: "All",     value: "all" },
@@ -24,7 +41,7 @@ const filters: { label: string; value: MediaType | "all" }[] = [
   { label: "Photo",   value: "photo" },
 ];
 
-const typeIcons: Record<MediaType, React.ElementType> = {
+const typeIcons: Record<string, React.ElementType> = {
   music: Music,
   video: Film,
   podcast: Mic,
@@ -48,12 +65,30 @@ const cardVariants: Variants = {
   exit: { opacity: 0, transition: { duration: 0.15 } },
 };
 
-export default function MediaLibraryContent() {
+export default function MediaLibraryContent({ initialItems }: Props) {
   const [activeFilter, setActiveFilter] = useState<MediaType | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const rawItems = (initialItems && initialItems.length > 0) ? initialItems : fallbackMediaItems;
+
+  const normalizedItems: NormalizedMediaItem[] = useMemo(() => {
+    return rawItems.map((item) => {
+      const isCms = "thumbnail_url" in item;
+      return {
+        id: item.id,
+        title: item.title,
+        description: item.description ?? "",
+        type: item.type,
+        thumbnailUrl: (isCms ? item.thumbnail_url : (item as { thumbnailUrl?: string }).thumbnailUrl) ?? "",
+        externalUrl: (isCms ? item.external_url : (item as { externalUrl?: string }).externalUrl) ?? "#",
+        duration: item.duration,
+        isPremium: Boolean(isCms ? item.is_premium : (item as { isPremium?: boolean }).isPremium),
+      };
+    });
+  }, [rawItems]);
+
   const filteredItems = useMemo(() => {
-    let items = mediaItems;
+    let items = normalizedItems;
 
     if (activeFilter !== "all") {
       items = items.filter((item) => item.type === activeFilter);
@@ -69,7 +104,7 @@ export default function MediaLibraryContent() {
     }
 
     return items;
-  }, [activeFilter, searchQuery]);
+  }, [normalizedItems, activeFilter, searchQuery]);
 
   return (
     <section className="relative pt-32" style={{ backgroundColor: "var(--color-fm2-black)" }}>
@@ -117,7 +152,7 @@ export default function MediaLibraryContent() {
               key={filter.value}
               onClick={() => setActiveFilter(filter.value)}
               className={cn(
-                "px-5 py-2 rounded-full text-sm font-medium tracking-wide whitespace-nowrap transition-all duration-200",
+                "px-5 py-2 rounded-full text-sm font-medium tracking-wide whitespace-nowrap transition-all duration-200 cursor-pointer",
                 activeFilter === filter.value ? "text-black" : "text-[#888880] hover:text-[#F5F5F0]"
               )}
               style={{
@@ -151,7 +186,7 @@ export default function MediaLibraryContent() {
           >
             <AnimatePresence mode="popLayout">
               {filteredItems.map((item) => {
-                const TypeIcon = typeIcons[item.type];
+                const TypeIcon = typeIcons[item.type] ?? Film;
                 return (
                   <motion.a
                     key={item.id}
@@ -163,13 +198,22 @@ export default function MediaLibraryContent() {
                     animate="visible"
                     exit="exit"
                     layout
-                    className="group relative rounded-lg overflow-hidden card-surface cursor-pointer !p-0"
+                    className="group relative rounded-lg overflow-hidden card-surface cursor-pointer !p-0 flex flex-col h-full"
                   >
-                    <div className="relative aspect-video overflow-hidden">
-                      <div
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                        style={{ backgroundImage: `url(${item.thumbnailUrl})` }}
-                      />
+                    <div className="relative aspect-video overflow-hidden shrink-0">
+                      {item.thumbnailUrl ? (
+                        <div
+                          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                          style={{ backgroundImage: `url(${item.thumbnailUrl})` }}
+                        />
+                      ) : (
+                        <div
+                          className="absolute inset-0 flex items-center justify-center"
+                          style={{ backgroundColor: "var(--color-fm2-surface)" }}
+                        >
+                          <TypeIcon size={32} style={{ color: "var(--color-fm2-gold)", opacity: 0.3 }} />
+                        </div>
+                      )}
                       <div
                         className="absolute inset-0"
                         style={{ background: "linear-gradient(180deg, transparent 50%, rgba(8,8,8,0.7) 100%)" }}
@@ -206,17 +250,17 @@ export default function MediaLibraryContent() {
                       </div>
                     </div>
 
-                    <div className="p-5 flex flex-col gap-2">
+                    <div className="p-5 flex flex-col flex-1 gap-2">
                       <div className="flex items-center gap-2">
                         <TypeIcon size={13} style={{ color: "var(--color-fm2-gold)" }} />
                         <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "var(--color-fm2-gold)" }}>
                           {item.type}
                         </span>
                       </div>
-                      <h3 className="font-display font-bold text-lg leading-snug" style={{ color: "var(--color-fm2-white)" }}>
+                      <h3 className="font-display font-bold text-lg leading-snug line-clamp-1" style={{ color: "var(--color-fm2-white)" }}>
                         {item.title}
                       </h3>
-                      <p className="text-sm leading-relaxed" style={{ color: "var(--color-fm2-muted)" }}>
+                      <p className="text-sm leading-relaxed line-clamp-2 mt-auto" style={{ color: "var(--color-fm2-muted)" }}>
                         {item.description}
                       </p>
                     </div>

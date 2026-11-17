@@ -26,7 +26,11 @@ if (!supabaseUrl || !supabaseAnon) {
 }
 
 // Public client — safe in browser and server components
-export const supabase = createClient(supabaseUrl, supabaseAnon);
+export const supabase = createClient(supabaseUrl, supabaseAnon, {
+  global: {
+    fetch: (url, options) => fetch(url, { ...options, cache: "no-store" }),
+  },
+});
 
 // Admin client factory — SERVER SIDE ONLY
 // Call this inside API route handlers, never in components
@@ -40,5 +44,8 @@ export function createAdminClient() {
   }
   return createClient(supabaseUrl, serviceKey, {
     auth: { autoRefreshToken: false, persistSession: false },
+    global: {
+      fetch: (url, options) => fetch(url, { ...options, cache: "no-store" }),
+    },
   });
 }

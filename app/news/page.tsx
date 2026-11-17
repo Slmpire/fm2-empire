@@ -6,6 +6,9 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import AnimatedText from "@/components/ui/AnimatedText";
 import type { CMSPost } from "@/lib/cms";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "News",
   description: "Latest news, announcements, and updates from FM2 Empire.",
@@ -55,18 +58,22 @@ export default async function NewsPage() {
               <Link
                 key={post.id}
                 href={`/news/${post.slug}`}
-                className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 block !p-0"
+                className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 flex flex-col h-full !p-0"
               >
-                {post.cover_image && (
-                  <div className="aspect-video overflow-hidden">
+                <div className="aspect-video overflow-hidden shrink-0 bg-neutral-900">
+                  {post.cover_image ? (
                     <img
                       src={post.cover_image}
                       alt={post.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  </div>
-                )}
-                <div className="p-5 flex flex-col gap-3">
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-neutral-600">
+                      FM2 Empire News
+                    </div>
+                  )}
+                </div>
+                <div className="p-5 flex flex-col flex-1 gap-3">
                   <div className="flex items-center gap-2">
                     <span
                       className="text-xs font-semibold uppercase tracking-wide"
@@ -81,17 +88,17 @@ export default async function NewsPage() {
                     )}
                   </div>
                   <h2
-                    className="font-display font-bold text-lg leading-snug"
+                    className="font-display font-bold text-lg leading-snug line-clamp-2"
                     style={{ color: "var(--color-fm2-white)" }}
                   >
                     {post.title}
                   </h2>
                   {post.excerpt && (
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--color-fm2-muted)" }}>
+                    <p className="text-sm leading-relaxed line-clamp-3" style={{ color: "var(--color-fm2-muted)" }}>
                       {post.excerpt}
                     </p>
                   )}
-                  <span className="text-xs font-semibold mt-1" style={{ color: "var(--color-fm2-gold)" }}>
+                  <span className="text-xs font-semibold mt-auto pt-2 inline-flex items-center gap-1" style={{ color: "var(--color-fm2-gold)" }}>
                     Read More →
                   </span>
                 </div>

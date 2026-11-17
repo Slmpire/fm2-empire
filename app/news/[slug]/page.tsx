@@ -5,6 +5,10 @@ import { ArrowLeft } from "lucide-react";
 import { getPostBySlug, getPublishedPosts } from "@/lib/cms";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+
 export async function generateStaticParams() {
   try {
     const posts = await getPublishedPosts();

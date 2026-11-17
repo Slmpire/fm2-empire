@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { initializePayment, toKobo, generateTicketCode } from "@/lib/paystack";
 import { createAdminClient } from "@/lib/supabase";
+import { getEventBySlug } from "@/lib/cms";
 import { allEvents } from "@/lib/data";
 
 export async function POST(request: NextRequest) {
@@ -27,23 +28,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find the event
-    const event = allEvents.find((e) => e.slug === eventSlug);
-    if (!event) {
+    // Find the event from CMS or fallback to data.ts
+    const cmsEvent = await getEventBySlug(eventSlug).catch(() => null);
+    const fallback = allEvents.find((e) => e.slug === eventSlug);
+
+    const ticketPrice = cmsEvent ? cmsEvent.ticket_price : fallback?.ticketPrice;
+    const eventTitle  = cmsEvent?.title ?? fallback?.title ?? eventSlug;
+
+    if (ticketPrice === undefined) {
       return NextResponse.json(
         { error: "Event not found" },
         { status: 404 }
       );
     }
 
-    if (event.ticketPrice === 0) {
+    if (ticketPrice === 0) {
       return NextResponse.json(
         { error: "This is a free event — no payment needed" },
         { status: 400 }
       );
     }
 
-    const totalAmount  = event.ticketPrice * quantity;
+    const totalAmount  = ticketPrice * quantity;
     const reference    = `FM2-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
     const ticketCode   = generateTicketCode();
     const callbackUrl  = `${process.env.NEXT_PUBLIC_SITE_URL}/payment/verify?ref=${reference}`;
@@ -52,7 +58,7 @@ export async function POST(request: NextRequest) {
     const supabase = createAdminClient();
     const { error: dbError } = await supabase.from("tickets").insert({
       event_slug:   eventSlug,
-      event_title:  event.title,
+      event_title:  eventTitle,
       full_name:    fullName,
       email,
       phone:        phone ?? null,
@@ -81,7 +87,7 @@ export async function POST(request: NextRequest) {
         full_name:   fullName,
         phone:       phone ?? "",
         event_slug:  eventSlug,
-        event_title: event.title,
+        event_title: eventTitle,
         quantity,
         ticket_code: ticketCode,
       },

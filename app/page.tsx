@@ -5,6 +5,9 @@
 
 import LandingPage from "./(marketing)/page";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default function RootPage() {
   return <LandingPage />;
 }

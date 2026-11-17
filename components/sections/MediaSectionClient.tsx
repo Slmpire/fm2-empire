@@ -135,10 +135,10 @@ export default function MediaSectionClient({ items }: { items: CMSMediaItem[] })
                     animate="visible"
                     exit="exit"
                     layout
-                    className="group relative rounded-lg overflow-hidden card-surface cursor-pointer !p-0"
+                    className="group relative rounded-lg overflow-hidden card-surface cursor-pointer !p-0 flex flex-col h-full"
                   >
                     {/* Thumbnail */}
-                    <div className="relative aspect-video overflow-hidden">
+                    <div className="relative aspect-video overflow-hidden shrink-0">
                       {item.thumbnail_url ? (
                         <div
                           className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -191,7 +191,7 @@ export default function MediaSectionClient({ items }: { items: CMSMediaItem[] })
                     </div>
 
                     {/* Info */}
-                    <div className="p-5 flex flex-col gap-2">
+                    <div className="p-5 flex flex-col flex-1 gap-2">
                       <div className="flex items-center gap-2">
                         <TypeIcon size={13} style={{ color: "var(--color-fm2-gold)" }} />
                         <span
@@ -202,14 +202,14 @@ export default function MediaSectionClient({ items }: { items: CMSMediaItem[] })
                         </span>
                       </div>
                       <h3
-                        className="font-display font-bold text-lg leading-snug"
+                        className="font-display font-bold text-lg leading-snug line-clamp-1"
                         style={{ color: "var(--color-fm2-white)" }}
                       >
                         {item.title}
                       </h3>
                       {item.description && (
                         <p
-                          className="text-sm leading-relaxed"
+                          className="text-sm leading-relaxed line-clamp-2 mt-auto"
                           style={{ color: "var(--color-fm2-muted)" }}
                         >
                           {item.description}

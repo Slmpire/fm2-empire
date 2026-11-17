@@ -1,10 +1,15 @@
 // ============================================================
 // FM2 EMPIRE — MEDIA LIBRARY PAGE (route: /media)
 // Full library with all items, real filtering, and search.
+// Live Supabase CMS data. Updates reflect without redeployment.
 // ============================================================
 
 import type { Metadata } from "next";
 import MediaLibraryContent from "@/components/pages/MediaLibraryContent";
+import { getPublishedMedia } from "@/lib/cms";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Media Library",
@@ -12,6 +17,7 @@ export const metadata: Metadata = {
     "Watch and listen to FM2 Empire's full media library — music, podcasts, video, series, and photo stories.",
 };
 
-export default function MediaLibraryPage() {
-  return <MediaLibraryContent />;
+export default async function MediaLibraryPage() {
+  const items = await getPublishedMedia().catch(() => []);
+  return <MediaLibraryContent initialItems={items} />;
 }

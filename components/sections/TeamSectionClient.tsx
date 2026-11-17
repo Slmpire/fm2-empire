@@ -45,12 +45,12 @@ export default function TeamSectionClient({ members }: { members: CMSTeamMember[
           viewport={{ once: true, margin: "-80px" }}
         >
           {members.map((member) => (
-            <motion.div key={member.id} variants={cardVariants}>
+            <motion.div key={member.id} variants={cardVariants} className="h-full">
               <Link
                 href={`/team/${member.slug}`}
-                className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 block !p-0"
+                className="card-surface overflow-hidden group hover:border-[#C9A84C]/40 transition-colors duration-300 flex flex-col h-full !p-0"
               >
-                <div className="relative aspect-square overflow-hidden">
+                <div className="relative aspect-square overflow-hidden shrink-0">
                   {member.image_url ? (
                     <img
                       src={member.image_url}
@@ -66,10 +66,10 @@ export default function TeamSectionClient({ members }: { members: CMSTeamMember[
                   )}
                   <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 60%, rgba(8,8,8,0.6) 100%)" }} />
                 </div>
-                <div className="p-5 flex flex-col gap-1">
-                  <h3 className="font-display font-bold text-lg leading-snug" style={{ color: "var(--color-fm2-white)" }}>{member.name}</h3>
-                  <span className="text-xs font-semibold tracking-wide uppercase" style={{ color: "var(--color-fm2-gold)" }}>{member.role}</span>
-                  {member.bio && <p className="text-sm leading-relaxed mt-2" style={{ color: "var(--color-fm2-muted)" }}>{member.bio}</p>}
+                <div className="p-5 flex flex-col flex-1 gap-1">
+                  <h3 className="font-display font-bold text-lg leading-snug line-clamp-1" style={{ color: "var(--color-fm2-white)" }}>{member.name}</h3>
+                  <span className="text-xs font-semibold tracking-wide uppercase line-clamp-1" style={{ color: "var(--color-fm2-gold)" }}>{member.role}</span>
+                  {member.bio && <p className="text-sm leading-relaxed mt-auto pt-2 line-clamp-3" style={{ color: "var(--color-fm2-muted)" }}>{member.bio}</p>}
                 </div>
               </Link>
             </motion.div>

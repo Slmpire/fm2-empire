@@ -277,6 +277,22 @@ export async function adminSaveEvent(
 ): Promise<CMSEvent> {
   const client = createAdminClient();
 
+  // If this event is being marked as featured, un-feature all other events
+  // so there is always exactly one featured event on the homepage
+  if (data.is_featured === true) {
+    if (id) {
+      await client
+        .from("events")
+        .update({ is_featured: false })
+        .neq("id", id);
+    } else {
+      await client
+        .from("events")
+        .update({ is_featured: false })
+        .neq("id", "");
+    }
+  }
+
   if (id) {
     const { data: updated, error } = await client
       .from("events")
@@ -295,6 +311,27 @@ export async function adminSaveEvent(
     .single();
   if (error) throw error;
   return created as CMSEvent;
+}
+
+export async function adminSetFeaturedEvent(id: string): Promise<CMSEvent> {
+  const client = createAdminClient();
+
+  // 1. Un-feature all events
+  await client
+    .from("events")
+    .update({ is_featured: false })
+    .neq("id", "");
+
+  // 2. Mark this single event as featured
+  const { data, error } = await client
+    .from("events")
+    .update({ is_featured: true })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as CMSEvent;
 }
 
 export async function adminDeleteEvent(id: string): Promise<void> {
