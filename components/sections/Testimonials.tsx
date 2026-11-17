@@ -26,7 +26,7 @@ const testimonials: Testimonial[] = [
     quote:
       "Yeah so far so good, I have worked with Fm2empire for more than  4years now on different projects and they have been so awesome. Their professionalism, their taste for high quality creativity and consistency has been awesome. I look forward to working with you guys more in years to come",
     name: "Jimmy Ex",
-    role: "Creative",
+    role: "Musical Artist, Imo state",
     imageUrl:
       "https://res.cloudinary.com/fi0iuzdw/image/upload/v1794597088/file_000000000570820ea84b3a9edd8c04fe.png",
   },
@@ -35,16 +35,16 @@ const testimonials: Testimonial[] = [
     quote:
       "They’ve handled most of my visuals over the past three years, so I’ve had a front-row seat to their work ethic, creativity, and commitment to the craft.If you need people who care about the work as much as you do, people who will push, improvise, and find a way to bring your vision to life, I can recommend FM2 Empire without a second thought.",
     name: "MO'BELIEVE",
-    role: "Event Partner, Lagos Creative Week",
+    role: "Musical Artist, Lagos",
     imageUrl:
       "https://res.cloudinary.com/fi0iuzdw/image/upload/v1794597084/IMG-20261111-WA0088.jpg",
   },
   {
     id: "3",
     quote:
-      "The internship gave me real studio hours, not busywork. Three weeks in and I was already in love with their services. They are just the best. I would recommend them to anyone looking for a creative agency that is not only professional but also fun to work with.",
+      "I recommended them for MEGAWATT on a media contract and they did deliver beyond my expectation. I did not regret recommending them. They are very professional and creative. I will recommend them to anyone who needs media services.",
     name: "Etienne Steve",
-    role: "Media Lead at MegaWatt",
+    role: "Media Lead at MEGAWATT, Lagos",
     imageUrl:
       "https://res.cloudinary.com/fi0iuzdw/image/upload/v1794605146/IMG-20261111-WA0014.jpg",
   },

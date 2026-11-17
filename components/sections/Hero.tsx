@@ -28,9 +28,9 @@ const HERO_IMAGE =
   "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=2400&auto=format&fit=crop";
 
 const stats = [
-  { value: "50+", label: "Talents Developed" },
-  { value: "100+", label: "Productions" },
-  { value: "20+", label: "Events Hosted" },
+  { value: "10+", label: "Talents Developed" },
+  { value: "20+", label: "Productions" },
+  { value: "2+", label: "Events Hosted" },
   { value: "Africa", label: "Our Stage" },
 ];
 
