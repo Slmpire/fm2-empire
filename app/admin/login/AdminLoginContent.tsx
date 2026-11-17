@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
+import Logo from "@/components/ui/Logo";
 
 export default function AdminLoginContent() {
   const router = useRouter();
@@ -92,21 +93,12 @@ export default function AdminLoginContent() {
         {/* Logo */}
         <div
           style={{
-            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
             marginBottom: "2rem",
           }}
         >
-          <p
-            style={{
-              margin: 0,
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              fontFamily: "Georgia, serif",
-              color: "#F5F5F0",
-            }}
-          >
-            FM2 <span style={{ color: "#C9A84C" }}>Empire</span>
-          </p>
+          <Logo size="xl" />
 
           <p
             style={{

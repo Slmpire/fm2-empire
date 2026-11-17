@@ -10,6 +10,7 @@
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/ui/Logo";
 import {
   FaInstagram,
   FaXTwitter,
@@ -118,15 +119,7 @@ export default function Footer() {
           viewport={{ once: true, margin: "-80px" }}
         >
           <motion.div className="lg:col-span-2 flex flex-col gap-5" variants={itemVariants}>
-            <Link href="/" className="inline-block">
-              <span
-                className="font-display text-3xl font-bold tracking-tight"
-                style={{ color: "var(--color-fm2-white)" }}
-              >
-                FM2
-                <span style={{ color: "var(--color-fm2-gold)" }}> Empire</span>
-              </span>
-            </Link>
+            <Logo size="lg" />
 
             <p
               className="text-sm leading-relaxed max-w-xs"

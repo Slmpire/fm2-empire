@@ -10,6 +10,7 @@
 import { motion, type Variants } from "framer-motion";
 import { ArrowDown, Play } from "lucide-react";
 import Button from "@/components/ui/Button";
+import Logo from "@/components/ui/Logo";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -67,6 +68,16 @@ export default function Hero() {
 
       <div className="container-fm2 relative z-10 flex w-full flex-col items-center px-4 sm:px-6 lg:px-8">
         <div className="flex min-h-screen w-full flex-col items-center justify-center py-24 sm:py-28 lg:py-50">
+
+          {/* Logo Emblem */}
+          <motion.div
+            className="mb-8 flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Logo size="xl" href={null} />
+          </motion.div>
 
           {/* GAP-1: space below the eyebrow row */}
           <motion.div

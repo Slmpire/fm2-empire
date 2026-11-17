@@ -3,8 +3,8 @@
 // Next.js renders this automatically for any unmatched route.
 // ============================================================
 
-import Link from "next/link";
 import Button from "@/components/ui/Button";
+import Logo from "@/components/ui/Logo";
 
 export default function NotFound() {
   return (
@@ -13,6 +13,8 @@ export default function NotFound() {
       style={{ backgroundColor: "var(--color-fm2-black)" }}
     >
       <div className="container-fm2 flex flex-col items-center text-center gap-6 py-20">
+        <Logo size="lg" />
+
         <span
           className="font-display font-bold leading-none"
           style={{ fontSize: "clamp(4rem, 12vw, 8rem)", color: "var(--color-fm2-surface)" }}
@@ -26,8 +28,8 @@ export default function NotFound() {
           This Page Took an Early Exit
         </h1>
         <p className="max-w-sm text-sm leading-relaxed" style={{ color: "var(--color-fm2-muted)" }}>
-          The page you're looking for doesn't exist or may have moved.
-          Let's get you back on stage.
+          The page you&apos;re looking for doesn&apos;t exist or may have moved.
+          Let&apos;s get you back on stage.
         </p>
         <Button href="/" variant="primary" size="md">
           Back to Homepage

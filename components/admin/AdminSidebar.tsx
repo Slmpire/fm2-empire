@@ -15,6 +15,7 @@ import {
   Calendar, Film, Users, Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/ui/Logo";
 import { hasPermission, NAV_PERMISSIONS, ROLE_LABELS, ROLE_COLOURS } from "@/lib/rbac";
 import type { AdminRole } from "@/lib/rbac";
 
@@ -56,12 +57,8 @@ export default function AdminSidebar({ role, name }: Props) {
   const NavContent = () => (
     <>
       {/* Logo */}
-      <div style={{ padding: "0 1.5rem", height: "4rem", display: "flex", alignItems: "center", borderBottom: "1px solid #2A2A2A", flexShrink: 0 }}>
-        <Link href="/" style={{ textDecoration: "none" }}>
-          <span style={{ fontWeight: 700, fontSize: "1.125rem", fontFamily: "Georgia, serif", color: "#F5F5F0" }}>
-            FM2 <span style={{ color: "#C9A84C" }}>Admin</span>
-          </span>
-        </Link>
+      <div style={{ padding: "0 1.25rem", height: "4rem", display: "flex", alignItems: "center", borderBottom: "1px solid #2A2A2A", flexShrink: 0 }}>
+        <Logo size="sm" />
       </div>
 
       {/* Role badge */}

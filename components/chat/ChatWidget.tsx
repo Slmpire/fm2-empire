@@ -12,6 +12,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FM2LogoSvg } from "@/components/ui/Logo";
 
 type ChatMessage = {
   role: "user" | "model";
@@ -138,10 +139,9 @@ export default function ChatWidget() {
               style={{ borderColor: "var(--color-fm2-border)" }}
             >
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-                style={{ backgroundColor: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)" }}
+                className="w-10 h-7 shrink-0 flex items-center justify-center"
               >
-                <Sparkles size={15} style={{ color: "var(--color-fm2-gold)" }} />
+                <FM2LogoSvg className="h-6 w-auto drop-shadow-[0_0_8px_rgba(201,168,76,0.3)]" />
               </div>
               <div className="flex flex-col">
                 <span className="font-display font-bold text-sm" style={{ color: "var(--color-fm2-white)" }}>

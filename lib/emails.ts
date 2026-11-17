@@ -37,10 +37,8 @@ function baseTemplate(content: string): string {
 
               <!-- HEADER -->
               <tr>
-                <td style="padding:32px 40px;background-color:${colors.dark};border-bottom:2px solid ${colors.gold};border-radius:8px 8px 0 0;">
-                  <p style="margin:0;font-size:24px;font-weight:700;color:${colors.white};font-family:Georgia,serif;">
-                    FM2 <span style="color:${colors.gold};">Empire</span>
-                  </p>
+                <td style="padding:28px 40px;background-color:${colors.dark};border-bottom:2px solid ${colors.gold};border-radius:8px 8px 0 0;">
+                  <img src="${process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com"}/logo.svg" alt="FM2 Empire" height="36" style="display:block;height:36px;width:auto;border:none;" />
                 </td>
               </tr>
 

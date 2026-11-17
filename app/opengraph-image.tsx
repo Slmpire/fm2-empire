@@ -35,13 +35,16 @@ export default async function OpengraphImage() {
           }}
         />
 
-        {/* Gold line */}
-        <div
+        {/* Logo Image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`${process.env.NEXT_PUBLIC_SITE_URL ?? "https://fm2empire.com"}/og-logo.png`}
+          alt="FM2 Empire"
+          width={220}
+          height={105}
           style={{
-            width: 60,
-            height: 3,
-            backgroundColor: "#C9A84C",
-            marginBottom: 28,
+            marginBottom: 20,
+            objectFit: "contain",
           }}
         />
 

@@ -15,6 +15,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
+import Logo from "@/components/ui/Logo";
 import type { NavLink } from "@/types/index";
 
 const navLinks: NavLink[] = [
@@ -133,15 +134,7 @@ export default function Navbar() {
         <div className="container-fm2">
           <div className="flex items-center justify-between h-20">
 
-            <Link href="/" className="flex items-center gap-2 group" onClick={closeMenu}>
-              <span
-                className="font-display text-2xl font-bold tracking-tight"
-                style={{ color: "var(--color-fm2-white)" }}
-              >
-                FM2
-                <span style={{ color: "var(--color-fm2-gold)" }}> Empire</span>
-              </span>
-            </Link>
+            <Logo size="md" onClick={closeMenu} />
 
             <nav className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => {
@@ -223,6 +216,10 @@ export default function Navbar() {
             exit="closed"
           >
             <div className="container-fm2 flex flex-col justify-center h-full pb-20">
+
+              <div className="mb-8">
+                <Logo size="lg" onClick={closeMenu} />
+              </div>
 
               <nav className="flex flex-col gap-2">
                 {navLinks.map((link, index) => (
